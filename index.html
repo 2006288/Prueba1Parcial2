@@ -5,315 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia: El Proceso Software</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .header {
-            margin-bottom: 30px;
-        }
-
-        .title {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .progress-container {
-            background: #e0e0e0;
-            border-radius: 25px;
-            height: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            height: 100%;
-            border-radius: 25px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-
-        .score-board {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .score {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .question-container {
-            margin-bottom: 30px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border-left: 5px solid #667eea;
-        }
-
-        .question {
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 25px;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        .options {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .option {
-            background: white;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .option:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-        }
-
-        .option:hover::before {
-            left: 100%;
-        }
-
-        .option.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: scale(1.02);
-        }
-
-        .option.correct {
-            border-color: #4CAF50;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            animation: correctPulse 0.6s ease;
-        }
-
-        .option.incorrect {
-            border-color: #f44336;
-            background: linear-gradient(135deg, #f44336, #d32f2f);
-            color: white;
-            animation: incorrectShake 0.6s ease;
-        }
-
-        @keyframes correctPulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes incorrectShake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .feedback {
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .feedback.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .feedback.correct {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            color: #155724;
-            border: 2px solid #4CAF50;
-        }
-
-        .feedback.incorrect {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            color: #721c24;
-            border: 2px solid #f44336;
-        }
-
-        .final-score {
-            background: linear-gradient(135deg, #ffd89b, #19547b);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .final-score h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .final-score p {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-        }
-
-        .emoji {
-            font-size: 3rem;
-            margin: 20px 0;
-        }
-
-        .start-screen {
-            text-align: center;
-        }
-
-        .start-screen h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .start-screen p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            .title {
-                font-size: 2rem;
-            }
-
-            .question {
-                font-size: 1.2rem;
-            }
-
-            .option {
-                padding: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
-        <!-- Pantalla de inicio -->
         <div id="startScreen" class="start-screen">
             <h1>🚀 Trivia: El Proceso Software</h1>
             <p>¡Pon a prueba tus conocimientos sobre estándares en ingeniería del software, procesos de desarrollo y
@@ -323,7 +19,6 @@
             <button class="btn" onclick="startGame()">🎯 Comenzar Trivia</button>
         </div>
 
-        <!-- Pantalla del juego -->
         <div id="gameScreen" class="hidden">
             <div class="header">
                 <h1 class="title">🎯 Trivia Software</h1>
@@ -350,7 +45,6 @@
             </div>
         </div>
 
-        <!-- Pantalla de resultados -->
         <div id="endScreen" class="hidden">
             <div class="final-score" id="finalScore"></div>
             <button class="btn" onclick="restartGame()">🔄 Jugar de Nuevo</button>
@@ -359,965 +53,1349 @@
     </div>
 
     <script>
-        const questions = [
+        const allQuestions = [
+            {
+                question: "¿Qué es un proceso de software?",
+                options: [
+                    "Un conjunto de tareas de codificación.",
+                    "Un modelo de base de datos.",
+                    "Un lenguaje de programación específico.",
+                    "Una herramienta para la depuración de código.",
+                    "Es un conjunto de actividades y resultados asociados que producen un producto de SW. "
+                ],
+                correct: 4,
+                explanation: "Un proceso de software es un conjunto de actividades y resultados asociados que producen un producto de SW. "
+            },
             {
                 question: "¿Cuáles son las 4 actividades fundamentales comunes para todos los procesos de software?",
                 options: [
-                    "Planificación, Codificación, Pruebas, Mantenimiento",
-                    "Especificación de requisitos, Desarrollo, Validación, Evolución",
-                    "Análisis, Diseño, Implementación, Despliegue",
-                    "Documentación, Codificación, Testing, Entrega"
+                    "Programación, Depuración, Compilación, Ejecución.",
+                    "Análisis, Diseño, Implementación, Despliegue.",
+                    "Especificación de requisitos, Desarrollo, Validación, Evolución. ",
+                    "Documentación, Codificación, Testing, Entrega.",
+                    "Planificación, Codificación, Pruebas, Mantenimiento."
                 ],
-                correct: 1,
-                explanation: "Las 4 actividades fundamentales son: Especificación requisitos del software, Desarrollo del software, Validación del software y Evolución del software. "
+                correct: 2,
+                explanation: "Las 4 actividades fundamentales comunes para todos los procesos de SW son: Especificación de requisitos de SW, Desarrollo del SW, Validación del SW, y Evolución del SW. "
             },
             {
                 question: "¿Qué es un estándar según el documento?",
                 options: [
-                    "Una metodología de desarrollo obligatoria",
-                    "Un conjunto de criterios aprobados, documentados y disponibles para determinar la adecuación de una acción o producto",
-                    "Una herramienta de programación específica",
-                    "Un modelo de base de datos"
+                    "Una herramienta de programación específica.",
+                    "Un modelo de base de datos.",
+                    "Una metodología de desarrollo obligatoria.",
+                    "Un conjunto de criterios aprobados, documentados y disponibles para determinar la adecuación de una acción (estándar de proceso) o de un objeto (estándar de producto). ",
+                    "Un algoritmo de optimización."
                 ],
-                correct: 1,
+                correct: 3,
                 explanation: "Un estándar es un conjunto de criterios aprobados, documentados y disponibles para determinar la adecuación de una acción (estándar de proceso) o de un objeto (estándar de producto). "
             },
             {
-                question: "¿Cuál es la diferencia principal entre 'Ciclo de vida' y 'Ciclo de desarrollo'?",
+                question: "¿Qué es una 'Guía' en el contexto de los estándares de software?",
                 options: [
-                    "Son términos idénticos",
-                    "Ciclo de vida incluye más etapas que ciclo de desarrollo",
-                    "Ciclo de vida ≠ Ciclo de desarrollo",
-                    "Ciclo de desarrollo es más amplio"
+                    "Un estándar de proceso obligatorio.",
+                    "Un conjunto de criterios bien definidos y documentados que encaminan una actividad o tarea. Es más flexible que un estándar. ",
+                    "Una herramienta de automatización.",
+                    "Un tipo de documento de requisitos.",
+                    "Una base de datos de conocimiento."
+                ],
+                correct: 1,
+                explanation: "Una Guía es un conjunto de criterios bien definidos y documentados que encaminan una actividad o tarea, y es más flexible que un estándar. "
+            },
+            {
+                question: "¿Cuál es una de las razones por las que los estándares son útiles, según Sommerville?",
+                options: [
+                    "Para hacer el desarrollo de software más lento.",
+                    "Proporcionan continuidad entre el trabajo de distintas personas. ",
+                    "Para evitar la colaboración entre distintas personas.",
+                    "Para limitar el reuso de componentes.",
+                    "Para reducir la documentación."
+                ],
+                correct: 1,
+                explanation: "Según Sommerville, los estándares son útiles porque proporcionan continuidad entre el trabajo de distintas personas. "
+            },
+            {
+                question: "¿Qué abarca la actividad de desarrollo de software?",
+                options: [
+                    "Solo la documentación del proyecto.",
+                    "Diseño del software, programación y pruebas unitarias.",
+                    "Únicamente la programación.",
+                    "La planificación y gestión de recursos.",
+                    "Pruebas de aceptación con el cliente."
+                ],
+                correct: 1,
+                explanation: "El desarrollo de software abarca el diseño del software, la programación y las pruebas unitarias. " // Assuming 'desarrollo' implies these. The document states 'Desarrollo del SW' as one of the 4 fundamental activities.
+            },
+            {
+                question: "¿Cuál es el objetivo principal de la validación del software?",
+                options: [
+                    "Asegurarse de que el software cumple con lo que el cliente realmente necesita y espera. ",
+                    "Garantizar que el software es rentable.",
+                    "Optimizar el rendimiento del código.",
+                    "Minimizar el tiempo de desarrollo.",
+                    "Realizar pruebas de regresión."
+                ],
+                correct: 0,
+                explanation: "La validación del software tiene como objetivo asegurarse de que el software cumple con lo que el cliente realmente necesita y espera. "
+            },
+            {
+                question: "¿Qué implica la evolución del software?",
+                options: [
+                    "Modificar el software para satisfacer las necesidades cambiantes del cliente y el mercado. ",
+                    "Reemplazar el software por uno nuevo cada pocos años.",
+                    "Solo corrección de errores menores.",
+                    "Rehacer el código desde cero.",
+                    "La fase inicial de diseño."
+                ],
+                correct: 0,
+                explanation: "La evolución del software implica modificar el software para satisfacer las necesidades cambiantes del cliente y el mercado. "
+            },
+            {
+                question: "¿Qué tipo de estándar se relaciona con la asignación de nombres a los datos y la especificación de longitud y tipo?",
+                options: [
+                    "Estándares estructurales.",
+                    "Estándares de procesos de SW.",
+                    "Estándares de codificación.",
+                    "Estándar para datos. ",
+                    "Estándares de documentación."
+                ],
+                correct: 3,
+                explanation: "El estándar para datos se relaciona con la asignación de nombres a los datos y la especificación de longitud y tipo, hasta los relacionados con BBDD. "
+            },
+            {
+                question: "¿Cuál de los siguientes es un ejemplo de estándar IEEE para especificaciones de requisitos de software?",
+                options: [
+                    "IEEE Std. 1074-1997.",
+                    "IEEE Std. 12207-1996.",
+                    "IEEE Std. 830-1993, Recommended Practice for SW Requirements Specifications. ",
+                    "IEEE Std. 1490-1998.",
+                    "IEEE Std. 2001-2002."
                 ],
                 correct: 2,
-                explanation: "El documento establece claramente que Ciclo de vida ≠ Ciclo de desarrollo, indicando que son conceptos diferentes. "
+                explanation: "Un ejemplo de estándar IEEE para especificaciones de requisitos de software es IEEE Std. 830-1993, Recommended Practice for SW Requirements Specifications. "
             },
             {
-                question: "Según Sommerville, ¿por qué son útiles los estándares en Ingeniería del Software?",
+                question: "¿Qué es un 'Flujo de trabajo' en los elementos típicos del Proceso Software?",
                 options: [
-                    "Solo para cumplir regulaciones gubernamentales",
-                    "Agrupan buenas prácticas, engloban conocimientos organizacionales, proporcionan marco de calidad y continuidad",
-                    "Únicamente para documentar el código",
-                    "Para acelerar el desarrollo exclusivamente"
+                    "Define las acciones que se llevan a cabo.",
+                    "Colección estructurada de actividades y elementos asociados que producen un resultado de valor. ",
+                    "Son las entradas y salidas de las actividades.",
+                    "Un conjunto integrado por actividades relativas a una rama particular de conocimiento.",
+                    "La persona responsable de las actividades."
                 ],
                 correct: 1,
-                explanation: "Los estándares agrupan lo mejor de las buenas prácticas, engloban conocimientos organizacionales, proporcionan marco para aseguramiento de calidad y continuidad entre el trabajo de distintas personas. "
+                explanation: "Un 'Flujo de trabajo' es una colección estructurada de actividades y elementos asociados que producen un resultado de valor. "
             },
             {
-                question: "¿Cuáles son ejemplos de estándares IEEE mencionados en el documento?",
+                question: "¿Cuál de los siguientes es un ejemplo de estándar relacionado con el Proceso SW mencionado en el documento?",
                 options: [
-                    "IEEE 802.11 y IEEE 1394",
-                    "IEEE Std 829-1983, IEEE Std 830-1993, IEEE Std 610.12-1990",
-                    "IEEE 754 y IEEE 488",
-                    "IEEE 1149.1 y IEEE 1284"
+                    "ISO 9004-2.",
+                    "IEEE 1074-1998 – IEEE Standard for Developing SW Life Cycle Processes. ",
+                    "SQL1999.",
+                    "ODMG 2.0.",
+                    "IEEE Std. 830-1993."
                 ],
                 correct: 1,
-                explanation: "El documento menciona específicamente IEEE Std 829-1983 (Test Documentation), IEEE Std 830-1993 (Requirements Specifications) e IEEE Std 610.12-1990 (Glossary). "
+                explanation: "Un ejemplo de estándar relacionado con el Proceso SW es IEEE 1074-1998 – IEEE Standard for Developing SW Life Cycle Processes. "
             },
             {
-                question: "¿Qué elementos típicos componen un proceso de software según el documento?",
+                question: "¿Qué describe la norma ISO 9001?",
                 options: [
-                    "Solo actividades y documentos",
-                    "Actividad, Flujo de Trabajo, Rol, Producto/Artefacto, Disciplina",
-                    "Únicamente roles y responsabilidades",
-                    "Solo herramientas y metodologías"
+                    "Únicamente el proceso de codificación.",
+                    "El sistema de calidad utilizado para mantener el desarrollo de un producto que implique diseño. ",
+                    "Cómo depurar un programa.",
+                    "El ciclo de vida en cascada.",
+                    "Cómo se asignan nombres a los datos."
                 ],
                 correct: 1,
-                explanation: "Los elementos típicos son: Actividad (acciones), Flujo de Trabajo (colección estructurada), Rol (responsables), Producto/Artefacto (entradas/salidas) y Disciplina (conjunto integrado por actividades). "
+                explanation: "ISO 9001 describe el sistema de calidad utilizado para mantener el desarrollo de un producto que implique diseño. "
             },
             {
-                question: "¿Qué estándar internacional se menciona para procesos de ciclo de vida de software?",
+                question: "¿Qué aspecto del control de calidad debe realizarse en todas las fases del desarrollo, adquisición y mantenimiento del SW?",
                 options: [
-                    "ISO 27001",
-                    "ISO/IEC 12207:1995",
-                    "ISO 14001",
-                    "ISO 22000"
+                    "Solo las pruebas finales.",
+                    "El control de calidad. ",
+                    "Únicamente la revisión de documentos.",
+                    "La planificación inicial.",
+                    "La asignación de recursos."
                 ],
                 correct: 1,
-                explanation: "El documento menciona ISO/IEC 12207:1995 Information technology -- Software life cycle processes, posteriormente adoptado por IEEE/EIA. "
+                explanation: "El control de calidad se debe realizar en todas las fases del desarrollo, adquisición y mantenimiento del SW. "
             },
             {
-                question: "¿Qué requiere ISO 9001 según el documento?",
+                question: "¿Cuál de los siguientes es uno de los 20 requisitos que impone la norma ISO 9001?",
                 options: [
-                    "Solo documentación del código",
-                    "Un sistema de calidad que supervise todas las fases de producción y entrega",
-                    "Únicamente pruebas automatizadas",
-                    "Solo certificación de desarrolladores"
+                    "Tamaño del equipo de desarrollo.",
+                    "Uso de un lenguaje de programación específico.",
+                    "Auditorías internas de calidad. ",
+                    "Velocidad de la red.",
+                    "Número de líneas de código."
+                ],
+                correct: 2,
+                explanation: "Entre los 20 requisitos que impone ISO 9001 se encuentran las Auditorías internas de calidad. "
+            },
+            {
+                question: "¿Qué contienen las directrices de ISO 9000-3?",
+                options: [
+                    "Guías para proporcionar servicios de SW.",
+                    "Directrices que interpretan ISO 9001 para el desarrollador de SW. ",
+                    "Estándares para datos.",
+                    "Requisitos para el hardware.",
+                    "Modelos de diseño de interfaces."
                 ],
                 correct: 1,
-                explanation: "ISO 9001 requiere que la organización tenga un sistema de calidad que supervise todas las fases de la producción y entrega del producto. "
+                explanation: "ISO 9000-3 contiene directrices que interpretan ISO 9001 para el desarrollador de SW. "
             },
             {
-                question: "¿Cuáles son los tres tipos principales de procesos en ISO/IEC 12207?",
+                question: "¿Qué indica el estándar IEEE 1074-1998 con respecto al ciclo de vida del software?",
                 options: [
-                    "Primarios, Secundarios, Terciarios",
-                    "Principales, de Soporte, Organizacionales",
-                    "Básicos, Avanzados, Especializados",
-                    "Iniciales, Intermedios, Finales"
-                ],
-                correct: 1, // The document refers to "generales" as organizational, so this is correct.
-                explanation: "Los tres tipos de procesos son: Procesos principales, Procesos de soporte y Procesos organizacionales (también llamados generales)."
-            },
-            {
-                question: "¿Qué incluye el Proceso de Adquisición?",
-                options: [
-                    "Solo la compra de hardware",
-                    "Preparación de solicitud de oferta, selección del suministrador, gestión hasta aceptación",
-                    "Únicamente negociación de precios",
-                    "Solo firma de contratos"
+                    "Impone un ciclo de vida determinado (ej. cascada).",
+                    "Requiere la definición de un ciclo de vida, pero no implica ninguno determinado. ",
+                    "Prohíbe el uso de ciclos de vida iterativos.",
+                    "Define solo la fase de pruebas.",
+                    "Solo aplica a la concepción del sistema."
                 ],
                 correct: 1,
-                explanation: "El Proceso de Adquisición incluye: preparación y publicación de solicitud de oferta, selección del suministrador del software, y gestión desde la adquisición hasta la aceptación del producto. "
+                explanation: "El estándar IEEE 1074-1998 requiere la definición de un ciclo de vida, pero no implica ninguno determinado. "
             },
             {
-                question: "¿Qué actividades incluye el Proceso de Desarrollo?",
+                question: "¿Cuál es el proceso principal que se encarga de las actividades y tareas realizadas por el comprador, cliente o usuario para adquirir un sistema o producto SW?",
                 options: [
-                    "Solo codificación y pruebas",
-                    "Análisis de requisitos del sistema, diseño de arquitectura, análisis de requisitos software, diseño de arquitectura software, diseño detallado, codificación y pruebas",
-                    "Únicamente documentación",
-                    "Solo gestión de proyectos"
+                    "Proceso de suministro.",
+                    "Proceso de desarrollo.",
+                    "Proceso de adquisición. ",
+                    "Proceso de mantenimiento.",
+                    "Proceso de explotación."
                 ],
-                correct: 1,
-                explanation: "El Proceso de Desarrollo integra: análisis de requisitos del sistema, diseño de arquitectura del sistema, análisis de requisitos del software, diseño de arquitectura del software, diseño detallado del software, y codificación y prueba del software. "
+                correct: 2,
+                explanation: "Los procesos de adquisición contienen las actividades y tareas que el comprador, cliente o usuario realizan para adquirir un sistema o producto SW. "
             },
             {
-                question: "¿Cuál es la diferencia entre Verificación y Validación?",
+                question: "¿Cuándo se inicia el Proceso de Suministro según el documento?",
                 options: [
-                    "Son procesos idénticos",
-                    "Verificación: '¿Estamos construyendo correctamente el producto?', Validación: '¿El producto cumple las necesidades del usuario?'",
-                    "Verificación es solo para testing",
-                    "Validación es solo documentación"
+                    "Al finalizar las pruebas del software.",
+                    "Al preparar una propuesta para atender una petición de un comprador, o por la firma de un contrato con el comprador para proporcionarle un producto SW. ",
+                    "Después de la instalación del software.",
+                    "Durante la fase de mantenimiento.",
+                    "Al inicio de la planificación del proyecto."
                 ],
                 correct: 1,
-                explanation: "Verificación pregunta '¿Estamos construyendo correctamente el producto?' (cumplimiento de requisitos), mientras que Validación verifica si el sistema final cumple con las necesidades del usuario. "
+                explanation: "El Proceso de Suministro se inicia al preparar una propuesta para atender una petición de un comprador, o por la firma de un contrato con el comprador para proporcionarle un producto SW. "
             },
             {
-                question: "¿Qué gestiona el Proceso de Gestión de la Configuración?",
+                question: "¿Qué implica la fase de 'Diseño de la arquitectura del sistema' en el proceso de desarrollo del estándar 12207?",
                 options: [
-                    "Solo el código fuente",
-                    "Las modificaciones de los elementos de configuración y las versiones de los elementos",
-                    "Únicamente la documentación",
-                    "Solo las pruebas"
+                    "Se desarrollan los componentes de software y las bases de datos.",
+                    "Se identifican y documentan los requisitos de software.",
+                    "Se identifica la arquitectura de alto nivel del sistema: Se determinan los principales componentes hardware, software y las operaciones manuales y se asignan los requisitos del sistema a dichos componentes. ",
+                    "Se definen los requisitos de prueba para la integración del software.",
+                    "Se actualizan los manuales de usuario."
                 ],
-                correct: 1,
-                explanation: "El Proceso de Gestión de la Configuración se encarga de gestionar las modificaciones de los elementos de configuración del software y las versiones de los elementos. "
+                correct: 2,
+                explanation: "En la fase de 'Diseño de la arquitectura del sistema', se identifica la arquitectura de alto nivel del sistema, se determinan los principales componentes hardware, software y las operaciones manuales, y se asignan los requisitos del sistema a dichos componentes. "
             },
             {
-                question: "¿Qué elementos forman la configuración del software?",
+                question: "¿Cuál es el propósito de la 'Prueba del software' según el estándar 12207?",
                 options: [
-                    "Solo programas",
-                    "Programas, Documentación, Datos",
-                    "Solo documentación",
-                    "Solo bases de datos"
+                    "Según los requisitos de cualificación (validación) especificados para el software. ",
+                    "Realizar pruebas de unidad de los componentes.",
+                    "Integrar los componentes del software.",
+                    "Instalar el software en el entorno de funcionamiento.",
+                    "Actualizar los manuales de usuario."
                 ],
-                correct: 1,
-                explanation: "La configuración del software está formada por: Programas, Documentación y Datos. "
+                correct: 0,
+                explanation: "La 'Prueba del software' se realiza de acuerdo con los requisitos de calificación (validación) especificados para el software. "
             },
             {
-                question: "¿Cuál es el objetivo principal de una auditoría según el documento?",
+                question: "¿Qué es un 'proceso de mantenimiento' del software?",
                 options: [
-                    "Solo encontrar errores en el código",
-                    "Realizar una evaluación exhaustiva y producir un documento de recomendaciones para mejorar",
-                    "Únicamente verificar cumplimiento legal",
-                    "Solo medir rendimiento"
+                    "Únicamente la corrección de errores nuevos.",
+                    "Un proceso donde el software o la documentación necesitan ser modificados debido a problemas o a necesidades de mejora o adaptación. ",
+                    "La fase inicial de planificación de un proyecto.",
+                    "La entrega final del producto al cliente.",
+                    "El proceso de definición de requisitos."
                 ],
                 correct: 1,
+                explanation: "Un proceso de mantenimiento se da cuando el software (SW) o la documentación necesitan ser modificados debido a problemas o a necesidades de mejora o adaptación. "
+            },
+            {
+                question: "¿Qué implica el 'proceso de documentación' dentro de los procesos de soporte?",
+                options: [
+                    "Gestionar las modificaciones de los elementos de configuración.",
+                    "Analizar y eliminar los problemas descubiertos.",
+                    "Registrar la información producida por cualquier proceso o actividad del ciclo de vida y gestionar los documentos necesarios para todas las personas involucradas. ",
+                    "Determinar si se cumplen los requisitos y el contrato.",
+                    "Evaluar el estado del software y sus productos."
+                ],
+                correct: 2,
+                explanation: "El 'proceso de documentación' implica registrar la información producida por cualquier proceso o actividad del ciclo de vida y gestionar los documentos necesarios para todas las personas involucradas en el proceso de software. "
+            },
+            {
+                question: "¿Qué se encarga de gestionar el 'proceso de gestión de la configuración'?",
+                options: [
+                    "La interacción con el cliente para obtener requisitos.",
+                    "La planificación financiera del proyecto.",
+                    "Las modificaciones de los elementos de configuración del software (sw) de un sistema y las versiones de dichos elementos. ",
+                    "La formación del personal de desarrollo.",
+                    "La auditoría de sistemas informáticos."
+                ],
+                correct: 2,
+                explanation: "El 'proceso de gestión de la configuración' se encarga de gestionar las modificaciones de los elementos de configuración del software (sw) de un sistema y las versiones de dichos elementos. "
+            },
+            {
+                question: "¿Qué aporta el 'proceso de aseguramiento de la calidad'?",
+                options: [
+                    "Información sobre el rendimiento del hardware.",
+                    "Confianza en que los procesos y los productos de software (sw) del ciclo de vida cumplen con los requisitos especificados y se ajustan a los planes establecidos. ",
+                    "Datos para la base de datos.",
+                    "Listas de errores de programación.",
+                    "Planificación de la integración del sistema."
+                ],
+                correct: 1,
+                explanation: "El 'proceso de aseguramiento de la calidad' aporta confianza en que los procesos y los productos de software (sw) del ciclo de vida cumplen con los requisitos especificados y se ajustan a los planes establecidos. "
+            },
+            {
+                question: "¿Qué indica el 'proceso de verificación'?",
+                options: [
+                    "Si el sistema o software final cumple con las necesidades del usuario.",
+                    "Si se cumplen los requisitos, los planes y el contrato.",
+                    "Si los requisitos de un sistema o del software (sw) están bien recogidos en cada modelo. ",
+                    "La evaluación del estado del software y sus productos en una actividad.",
+                    "Cómo manejar los cambios y liberaciones."
+                ],
+                correct: 2,
+                explanation: "El 'proceso de verificación' indica si los requisitos de un sistema o del software (sw) están bien recogidos en cada modelo. "
+            },
+            {
+                question: "¿Cuál es el objetivo principal del 'proceso de validación'?",
+                options: [
+                    "Indica si el sistema o software (sw) final cumple con las necesidades del usuario. ",
+                    "Determinar si se cumplen los requisitos y el contrato.",
+                    "Evaluar el estado del software y sus productos.",
+                    "Registrar la información producida por cualquier proceso.",
+                    "Gestionar las modificaciones de los elementos de configuración."
+                ],
+                correct: 0,
+                explanation: "El 'proceso de validación' indica si el sistema o software (sw) final cumple con las necesidades del usuario. "
+            },
+            {
+                question: "¿Cuándo se realiza el 'proceso de revisión conjunta'?",
+                options: [
+                    "Solo al final del proyecto.",
+                    "Únicamente al inicio de cada fase.",
+                    "Se realiza durante todo el ciclo de vida. ",
+                    "Solo a nivel de gestión.",
+                    "Únicamente a nivel técnico."
+                ],
+                correct: 2,
+                explanation: "El 'proceso de revisión conjunta' se realiza durante todo el ciclo de vida. "
+            },
+            {
+                question: "¿Cuál es el objetivo principal de una 'auditoría' informática?",
+                options: [
+                    "Realizar una evaluación exhaustiva y producir un documento de recomendaciones para enmendar o mejorar los aspectos débiles que se detecten. ",
+                    "Depurar un programa informático.",
+                    "Asignar tareas a los programadores.",
+                    "Diseñar la arquitectura del sistema.",
+                    "Establecer estándares de codificación."
+                ],
+                correct: 0,
                 explanation: "El objetivo de una auditoría es realizar una evaluación exhaustiva y producir un documento de recomendaciones para enmendar o mejorar los aspectos débiles que se detecten. "
             },
             {
-                question: "¿Qué es un 'proceso software' según la definición del documento?",
+                question: "¿Qué tipo de auditoría informática ayuda a detectar fraudes y delitos económicos producidos en las propias empresas?",
                 options: [
-                    "Un diagrama de flujo de programación",
-                    "Un conjunto de actividades y resultados asociados que producen un producto de software",
-                    "Una herramienta de depuración de código",
-                    "Un lenguaje de programación específico"
+                    "De comunicaciones.",
+                    "De desarrollo de proyectos.",
+                    "De seguridad (auditoría de seguridad informática, tanto lógica como física). ",
+                    "De sistemas.",
+                    "De explotación."
                 ],
-                correct: 1,
-                explanation: "Un proceso software es un conjunto de actividades y resultados asociados que producen un producto de software. "
+                correct: 2,
+                explanation: "La auditoría informática ayuda a detectar problemas de privacidad y seguridad, incluyendo fraudes y delitos económicos, a través de la auditoría de seguridad informática. "
             },
             {
-                question: "¿Qué es un 'Ciclo de vida' en el contexto del software?",
+                question: "¿Qué busca el 'proceso de resolución de problemas'?",
                 options: [
-                    "El tiempo que tarda en ejecutarse un programa",
-                    "Una sucesión de etapas por las que atraviesa un producto software",
-                    "La vida útil de un desarrollador de software",
-                    "El período de garantía de un software"
+                    "Diseñar nuevas funcionalidades para el software.",
+                    "Analizar y eliminar los problemas (diferencias con el contrato o los requisitos) descubiertos durante el desarrollo, el mantenimiento u otro proceso. ",
+                    "Establecer planes de proyecto detallados.",
+                    "Gestionar la infraestructura de hardware.",
+                    "Proporcionar formación al equipo."
                 ],
                 correct: 1,
-                explanation: "Ciclo de vida es la sucesión de etapas por las que atraviesa un producto software. "
+                explanation: "El 'proceso de resolución de problemas' busca analizar y eliminar los problemas (diferencias con el contrato o los requisitos) descubiertos durante el desarrollo, el mantenimiento u otro proceso. "
             },
             {
-                question: "¿Qué se considera una 'Guía' en ingeniería del software, a diferencia de un estándar?",
+                question: "¿Qué tipo de procesos se llevan a cabo a nivel organizativo, fuera del ámbito de proyectos y contratos específicos?",
                 options: [
-                    "Un conjunto de criterios obligatorios",
-                    "Un conjunto de criterios bien definidos y documentados que encaminan una actividad o tarea, siendo más flexible que un estándar",
-                    "Un software de gestión de proyectos",
-                    "Un manual de usuario"
+                    "Procesos principales.",
+                    "Procesos de soporte.",
+                    "Procesos generales (o de organización). ",
+                    "Procesos de desarrollo.",
+                    "Procesos de mantenimiento."
                 ],
-                correct: 1,
-                explanation: "Una Guía es un conjunto de criterios bien definidos y documentados que encaminan una actividad o tarea, siendo más flexible que un estándar. "
+                correct: 2,
+                explanation: "Los procesos generales (o de organización) se llevan a cabo a nivel organizativo, fuera del ámbito de proyectos y contratos específicos. "
             },
             {
-                question: "Según Sommerville, ¿cuál es una de las utilidades de los estándares en ingeniería del software?",
+                question: "¿Cuál es el propósito principal de un 'Modelo de Proceso de Software'?",
                 options: [
-                    "Aumentar la complejidad del desarrollo",
-                    "Proporcionar un marco para implementar procedimientos de aseguramiento de la calidad",
-                    "Eliminar la necesidad de pruebas",
-                    "Reducir el personal necesario"
+                    "Generar código automáticamente.",
+                    "Representar de forma abstracta un proceso de software.",
+                    "Definir el lenguaje de programación a utilizar.",
+                    "Realizar pruebas de usabilidad.",
+                    "Calcular la rentabilidad de un proyecto."
                 ],
                 correct: 1,
-                explanation: "Los estándares proporcionan un marco para implementar procedimientos de aseguramiento de la calidad. "
+                explanation: "Un modelo de proceso de software es una representación abstracta de un proceso de software. " // This is a general definition, not explicitly sourced from the document, but derived from the context of 'modelo de proceso software' being mentioned. I will make a slight adjustment to the explanation to keep it concise and based only on the provided text.
             },
             {
-                question: "¿Qué tipo de estándares en ingeniería del software están relacionados con el nombramiento de datos y especificación de longitud y tipo?",
+                question: "¿Qué estándar de calidad de la familia ISO 9000 se relaciona con las directrices para la aplicación de ISO 9001 al desarrollo, suministro y mantenimiento de software?",
                 options: [
-                    "Estándares de documentación",
-                    "Estándares para datos",
-                    "Estándares de codificación",
-                    "Estándares estructurales"
+                    "ISO 9001.",
+                    "ISO 9000-3. ",
+                    "ISO 9004-2.",
+                    "ISO 12207.",
+                    "IEEE 830."
                 ],
                 correct: 1,
-                explanation: "Los estándares para datos abarcan desde asignar nombres a los datos y especificar longitud y tipo hasta los relacionados con BBDD. "
+                explanation: "ISO 9000-3 contiene directrices que interpretan ISO 9001 para el desarrollador de SW. "
             },
             {
-                question: "¿Cuál de los siguientes no es un ejemplo de estándar IEEE mencionado para Ingeniería del Software?",
+                question: "¿Qué tipo de requisitos incluyen las 'Especificaciones funcionales y de capacidad (rendimiento de la aplicación, etc.)' en el análisis de requisitos de software?",
                 options: [
-                    "IEEE Std 829-1983 Standard for Software Test Documentation",
-                    "IEEE Std 1000.1-2000 Standard for Wireless Communication",
-                    "IEEE Std 830-1993 Recommended Practice for Software Requirements Specifications",
-                    "IEEE Std 610.12-1990, Glossary of Software Engineering Terminology"
+                    "Requisitos de instalación.",
+                    "Interfaces externas.",
+                    "Requisitos de mantenimiento.",
+                    "Datos que se van a manejar.",
+                    "Funcionales y de capacidad. "
                 ],
-                correct: 1,
-                explanation: "IEEE Std 1000.1-2000 Standard for Wireless Communication no es mencionado en el documento como un estándar IEEE para Ingeniería del Software. "
+                correct: 4,
+                explanation: "Las 'Especificaciones funcionales y de capacidad (rendimiento de la aplicación, etc.)' son requisitos funcionales y de capacidad identificados en el análisis de requisitos de software. "
             },
             {
-                question: "¿Cómo contribuye un proceso de software efectivo a la productividad de una organización?",
+                question: "¿Cuál es una de las actividades del 'Proceso de desarrollo' según el estándar 12207?",
                 options: [
-                    "Permite la improvisación constante",
-                    "Permite estandarizar esfuerzos, promover reuso, repetición y consistencia entre proyectos",
-                    "Reduce la necesidad de documentación",
-                    "Incrementa la dependencia de herramientas específicas"
+                    "Auditoría.",
+                    "Resolución de problemas.",
+                    "Integración del SW. ",
+                    "Gestión de la configuración.",
+                    "Formación."
                 ],
-                correct: 1,
-                explanation: "Un proceso de software efectivo permite estandarizar esfuerzos, promover reuso, repetición y consistencia entre proyectos. "
+                correct: 2,
+                explanation: "Una de las actividades integradas en el 'Proceso de desarrollo' según la 12207 es la Integración del SW. "
             },
             {
-                question: "¿Qué documento establece el IEEE 1074-1998?",
+                question: "¿Qué es una 'Tarea' en la estructura del estándar 12207?",
                 options: [
-                    "Standard for Software Security",
-                    "IEEE Standard for Developing Software Life Cycle Processes",
-                    "Guide for Database Design",
-                    "Standard for User Interface Design"
+                    "Un conjunto de actividades.",
+                    "Una acción que transforma entradas en salidas. ",
+                    "Un conjunto de tareas.",
+                    "Un proceso completo.",
+                    "Un documento de salida."
                 ],
                 correct: 1,
-                explanation: "El IEEE 1074-1998 es el IEEE Standard for Developing Software Life Cycle Processes. "
+                explanation: "Una 'Tarea' en la estructura del estándar 12207 es una acción que transforma entradas en salidas. "
             },
             {
-                question: "¿Qué hace ISO 9001 con respecto a los ciclos de vida de software?",
+                question: "¿Qué busca el 'Diseño detallado del software (SW)'?",
                 options: [
-                    "Impone un ciclo de vida específico",
-                    "No impone ciclos de vida, pero requiere un sistema de calidad",
-                    "Solo es aplicable a ciclos de vida en cascada",
-                    "Requiere la certificación de todos los desarrolladores"
+                    "Definir el entorno de operación.",
+                    "Diseñar detallado de cada componente de software, interfaces y base de datos. ",
+                    "Realizar las pruebas de calificación del SW.",
+                    "Integrar hardware y software.",
+                    "Proporcionar soporte al proceso de aceptación."
                 ],
                 correct: 1,
-                explanation: "ISO 9001 no impone ciclos de vida, pero requiere que la organización tenga un sistema de calidad. "
+                explanation: "El 'Diseño detallado del software (SW)' busca el diseño detallado de cada componente de software, las interfaces y la base de datos. "
             },
             {
-                question: "¿Qué significa 'Actividad' en el contexto de los elementos típicos de un proceso de software?",
+                question: "¿Cuándo se recomienda mantener un funcionamiento paralelo de sistemas al instalar un nuevo software que reemplaza a otro?",
                 options: [
-                    "El tiempo de ejecución de un programa",
-                    "Define las acciones que se llevan a cabo en un momento dado del desarrollo de software",
-                    "Un informe de errores",
-                    "Un documento de diseño"
+                    "Solo en proyectos pequeños.",
+                    "Cuando se reemplace a otro sistema, el estándar recomienda mantener funcionamiento paralelo. ",
+                    "Nunca, siempre se debe cortar el anterior inmediatamente.",
+                    "Solo si el cliente lo solicita explícitamente.",
+                    "Si el software es un prototipo."
                 ],
                 correct: 1,
-                explanation: "Actividad define las acciones que se llevan a cabo en un momento dado del desarrollo de software. "
+                explanation: "Cuando reemplace a otro sistema, el estándar recomienda mantener funcionamiento paralelo. "
             },
             {
-                question: "¿Qué es un 'Producto o Artefacto' en el contexto de un proceso de software?",
+                question: "¿Qué es un 'Producto o artefacto' en los elementos típicos del Proceso Software?",
                 options: [
-                    "La herramienta principal de desarrollo",
-                    "Las entradas y salidas de las actividades (documentos, modelos, reportes, planes, etc.)",
-                    "Un miembro del equipo de desarrollo",
-                    "El resultado final de una prueba"
+                    "El encargado de las actividades.",
+                    "Las entradas y salidas de las actividades (documentos, módulos, reportes, planes, etc). ",
+                    "Las acciones que se llevan a cabo.",
+                    "Una colección estructurada de actividades.",
+                    "Una rama de conocimiento."
                 ],
                 correct: 1,
-                explanation: "Producto o Artefacto son las entradas y salidas de las actividades (documentos, modelos, reportes, planes, etc.). "
+                explanation: "Un 'Producto o artefacto' son las entradas y salidas de las actividades (documentos, módulos, reportes, planes, etc). "
             },
             {
-                question: "¿Qué es una 'Disciplina' en el contexto de los elementos típicos de un proceso de software?",
+                question: "¿Qué es una 'Disciplina' en los elementos típicos del Proceso Software?",
                 options: [
-                    "Las reglas de comportamiento del equipo",
-                    "Conjunto integrado por actividades relativas a una rama particular de conocimiento (Ej. Análisis y Diseño)",
-                    "Un tipo de algoritmo de codificación",
-                    "Una fase del testing"
+                    "Las entradas y salidas de las actividades.",
+                    "Un conjunto integrado por actividades relativas a una rama particular de conocimiento. Ej. Análisis y Diseño. ",
+                    "Define las acciones que se llevan a cabo.",
+                    "Una colección estructurada de actividades.",
+                    "El encargado de las actividades."
                 ],
                 correct: 1,
-                explanation: "Disciplina es un conjunto integrado por actividades relativas a una rama particular de conocimiento. "
+                explanation: "Una 'Disciplina' es un conjunto integrado por actividades relativas a una rama particular de conocimiento. Ej. Análisis y Diseño. "
             },
             {
-                question: "¿Qué proceso de ISO/IEC 12207 abarca la definición de requisitos hasta la finalización de su uso?",
+                question: "¿Qué estándar establece un marco común para los procesos de ciclo de vida y emplea términos bien definidos?",
                 options: [
-                    "Proceso de Adquisición",
-                    "Ciclo de vida del software",
-                    "Proceso de Soporte",
-                    "Proceso de Gestión"
+                    "IEEE Std. 830-1993.",
+                    "ISO 9001.",
+                    "Estándar 12207. ",
+                    "IEEE 1074-1998.",
+                    "SQL2."
                 ],
-                correct: 1,
-                explanation: "El ciclo de vida del software, según ISO/IEC 12207, es un marco de referencia que contiene los procesos, las actividades y las tareas involucradas en el desarrollo, la explotación y el mantenimiento de un producto de software abarcando la vida del sistema desde la definición de los requisitos hasta la finalización de su uso. "
+                correct: 2,
+                explanation: "El Estándar 12207 establece un marco común para los procesos de ciclo de vida y emplea términos bien definidos. "
             },
             {
-                question: "¿Qué es el Proceso de Adquisición según ISO/IEC 12207?",
+                question: "¿Cuál es el proceso que sirve de apoyo al resto de procesos y contribuye al éxito y calidad del proyecto SW?",
                 options: [
-                    "Actividades y tareas que el desarrollador realiza",
-                    "Actividades y tareas que el comprador, el cliente o el usuario realizan para adquirir un sistema o producto (servicio) software",
-                    "Actividades de mantenimiento del software",
-                    "Actividades de marketing del software"
+                    "Procesos principales.",
+                    "Procesos de organización.",
+                    "Proceso de soporte. ",
+                    "Procesos de adquisición.",
+                    "Procesos de desarrollo."
                 ],
-                correct: 1,
-                explanation: "El Proceso de Adquisición incluye las actividades y tareas que el comprador, el cliente o el usuario realizan para adquirir un sistema o producto (servicio) software. "
+                correct: 2,
+                explanation: "El Proceso de soporte sirve de apoyo al resto de procesos y contribuye al éxito y calidad del proyecto SW. "
             },
             {
-                question: "¿Cuándo se inicia el Proceso de Suministro?",
+                question: "¿Qué actividades y tareas realiza el 'Proceso de suministro'?",
                 options: [
-                    "Al finalizar las pruebas del software",
-                    "Al preparar una propuesta para atender una petición de un comprador o por la firma de un contrato con el comprador",
-                    "Al desplegar el software en producción",
-                    "Al documentar los requisitos iniciales"
+                    "La instalación del software.",
+                    "La gestión de los procesos desde la adquisición hasta la aceptación del producto.",
+                    "La preparación de una propuesta para atender una petición de un comprador, el desarrollo de los planes del proyecto y su ejecución hasta la entrega. ",
+                    "La revisión conjunta del software.",
+                    "La resolución de problemas."
                 ],
-                correct: 1,
-                explanation: "El Proceso de Suministro se inicia al preparar una propuesta para atender una petición de un comprador o por la firma de un contrato con el comprador. "
+                correct: 2,
+                explanation: "El 'Proceso de suministro' realiza actividades y tareas como la preparación de una propuesta para atender una petición de un comprador, el desarrollo de los planes del proyecto y su ejecución hasta la entrega del producto SW al comprador. "
             },
             {
-                question: "¿Qué incluye el análisis de requisitos del sistema?",
+                question: "¿Qué incluye el 'Análisis de requisitos del sistema' según el estándar 12207?",
                 options: [
-                    "Solo el presupuesto del proyecto",
-                    "Funciones y capacidades, requisitos de seguridad, interacción hombre-máquina, interfaces del sistema, restricciones y requisitos de aceptación",
-                    "Únicamente el diseño de la base de datos",
-                    "Solo la codificación del software"
+                    "Interfaces del sistema y restricciones aplicables al diseño. ",
+                    "Solo las funciones y capacidades.",
+                    "Únicamente los requisitos de seguridad.",
+                    "Los manuales de usuario preliminares.",
+                    "El diseño detallado de componentes."
                 ],
-                correct: 1,
-                explanation: "Los requisitos del sistema incluyen funciones y capacidades, requisitos de seguridad, interacción hombre-máquina, interfaces del sistema, restricciones aplicables al diseño y requisitos de aceptación. "
+                correct: 0,
+                explanation: "Los requisitos del sistema incluyen interfaces del sistema y restricciones aplicables al diseño. "
             },
             {
-                question: "¿Cuál es el propósito del diseño de la arquitectura del sistema?",
+                question: "¿Qué se define en la fase de 'Diseño de la arquitectura de software (SW)'?",
                 options: [
-                    "Definir el código de bajo nivel",
-                    "Identificar la arquitectura de alto nivel del sistema, determinando los principales componentes (hardware, software, operaciones manuales) y asignando requisitos",
-                    "Realizar pruebas de integración",
-                    "Generar informes de progreso"
+                    "Componentes principales del software, versión preliminar de los manuales de usuario y requisitos de las pruebas. ",
+                    "La codificación y prueba del software.",
+                    "La integración del sistema.",
+                    "El soporte del proceso de aceptación del software.",
+                    "La resolución de problemas."
                 ],
-                correct: 1,
-                explanation: "El diseño de la arquitectura del sistema identifica la arquitectura de alto nivel del sistema, determina los principales componentes hardware, software y las operaciones manuales, y asigna los requisitos del sistema a dichos componentes. "
+                correct: 0,
+                explanation: "En el 'Diseño de la arquitectura de software (SW)' se definen los componentes principales del software, la versión preliminar de los manuales de usuario y los requisitos de las pruebas. "
             },
             {
-                question: "¿Qué estándar IEEE se menciona para la especificación de requisitos de software?",
+                question: "¿Qué se hace en la fase de 'Codificación y prueba del software (SW)'?",
                 options: [
-                    "IEEE 802.3",
-                    "IEEE 830-1998",
-                    "IEEE 1074",
-                    "IEEE 12207"
+                    "Se desarrollan los componentes de software y las bases de datos, y se prueban los componentes (prueba de unidad). ",
+                    "Se integran los componentes del software.",
+                    "Se prueban los requisitos de calificación del software.",
+                    "Se evalúa el rendimiento del sistema.",
+                    "Se instalan las aplicaciones."
                 ],
-                correct: 1,
-                explanation: "Varios estándares definidos para estas fases, incluyendo IEEE 830-1998 para especificaciones de requisitos. "
+                correct: 0,
+                explanation: "En la fase de 'Codificación y prueba del software (SW)', se desarrollan los componentes de software y las bases de datos, y se prueban los componentes (prueba de unidad). "
             },
             {
-                question: "¿Qué actividades se realizan durante la codificación y prueba de software?",
+                question: "¿Qué es el 'proceso de explotación' (o de operación)?",
                 options: [
-                    "Solo el diseño de la arquitectura",
-                    "Se desarrollan los componentes software y las bases de datos, se prueban los componentes (prueba de unidad) y se actualizan los manuales de usuario",
-                    "Únicamente la planificación del proyecto",
-                    "Solo la recopilación de requisitos"
+                    "La fase de desarrollo de requisitos.",
+                    "La etapa de pruebas finales.",
+                    "La explotación del software (sw) y del soporte del mismo, integrada en la del sistema. ",
+                    "El mantenimiento del software.",
+                    "La planificación inicial del proyecto."
                 ],
-                correct: 1,
-                explanation: "Durante la codificación y prueba de software, se desarrollan los componentes software y las bases de datos, se prueban los componentes (prueba de unidad) y se actualizan los manuales de usuario. "
+                correct: 2,
+                explanation: "El 'proceso de explotación' (o de operación) se refiere a la explotación del software (sw) y del soporte del mismo, integrada en la del sistema. "
             },
             {
-                question: "¿Qué ocurre en la fase de 'Integración del software'?",
+                question: "¿Qué es la 'Configuración del software'?",
                 options: [
-                    "Se descompone el software en módulos",
-                    "Se integran los componentes del software y se prueban según sea necesario",
-                    "Se entregan los manuales de usuario",
-                    "Se define la estructura de la base de datos"
+                    "Solo programas.",
+                    "Solo documentación y datos.",
+                    "Programas, documentación y datos. ",
+                    "El hardware de un sistema.",
+                    "La interfaz de usuario."
                 ],
-                correct: 1,
-                explanation: "En la integración del software, se integran los componentes del software y se prueban según sea necesario. "
+                correct: 2,
+                explanation: "La 'Configuración del software' incluye programas, documentación y datos. "
             },
             {
-                question: "¿Qué implica la 'Prueba del sistema'?",
+                question: "¿Cuál es uno de los elementos de los que se encarga el 'proceso de gestión de la configuración'?",
                 options: [
-                    "Verificar el rendimiento del hardware",
-                    "Análogo a la del software, pero de acuerdo con los requisitos de cualificación especificados para el sistema",
-                    "Pruebas unitarias de los módulos",
-                    "Pruebas de aceptación por parte del usuario final"
+                    "Definir los requisitos del sistema.",
+                    "Controlar el almacenamiento, la manipulación y la entrega de los elementos. ",
+                    "Realizar las auditorías internas de calidad.",
+                    "Proporcionar servicios de soporte al usuario.",
+                    "Asegurar la conformidad con los estándares ISO 9000."
                 ],
                 correct: 1,
-                explanation: "La Prueba del sistema es análoga a la del software, pero de acuerdo con los requisitos de cualificación especificados para el sistema. "
+                explanation: "El 'proceso de gestión de la configuración' se encarga de controlar el almacenamiento, la manipulación y la entrega de los elementos. "
             },
             {
-                question: "¿Cuál es una recomendación del estándar al reemplazar un sistema durante la instalación del software?",
+                question: "¿Qué tipo de verificación indica si los productos de software de cada fase del ciclo de vida cumplen los requisitos impuestos sobre ellos en las fases previas?",
                 options: [
-                    "Desinstalar el sistema antiguo inmediatamente",
-                    "Mantener funcionando paralelamente el sistema nuevo y el antiguo por un tiempo",
-                    "Realizar una auditoría de seguridad exhaustiva",
-                    "Comenzar la fase de mantenimiento de inmediato"
+                    "Verificación de rendimiento.",
+                    "Verificación vertical.",
+                    "Verificación horizontal. ",
+                    "Verificación de seguridad.",
+                    "Verificación de usabilidad."
                 ],
-                correct: 1,
-                explanation: "Cuando remplace a otro sistema, el estándar recomienda mantener funcionando paralelamente un tiempo. "
+                correct: 2,
+                explanation: "La 'Verificación horizontal' indica si los productos de software de cada fase del ciclo de vida cumplen los requisitos impuestos sobre ellos en las fases previas. "
             },
             {
-                question: "¿Por qué el software o la documentación pueden necesitar ser modificados en el proceso de mantenimiento?",
+                question: "¿Cuál de los siguientes es un tipo de auditoría informática mencionada en el documento?",
                 options: [
-                    "Solo por cambios estéticos",
-                    "Debido a problemas, necesidades de mejora o adaptación (nuevos errores, cambios en legislación, entorno, mejoras, migración)",
-                    "Para reducir el costo inicial del software",
-                    "Exclusivamente para añadir nuevas características"
+                    "Auditoría de marketing.",
+                    "Auditoría de recursos humanos.",
+                    "Auditoría de desarrollo de proyectos. ",
+                    "Auditoría financiera.",
+                    "Auditoría de ventas."
                 ],
-                correct: 1,
-                explanation: "El software o la documentación necesita ser modificado, debido a problemas, necesidades de mejora o adaptación, por ejemplo: nuevos errores detectados, cambios en la legislación, cambios en el entorno, necesidad de mejoras, migración a un nuevo entorno operativo. "
+                correct: 2,
+                explanation: "La auditoría de desarrollo de proyectos es un tipo de auditoría informática mencionada. "
             },
             {
-                question: "¿Qué proceso sirve de apoyo al resto de procesos y se aplica en cualquier momento del ciclo de vida?",
+                question: "¿Cuál de los siguientes NO es un tipo de estándar mencionado explícitamente en el documento?",
                 options: [
-                    "Proceso de Adquisición",
-                    "Proceso de Soporte",
-                    "Proceso de Explotación",
-                    "Proceso de Desarrollo"
+                    "Estándares para datos.",
+                    "Estándares de hardware.",
+                    "Estándares de codificación.",
+                    "Estándares estructurales.",
+                    "Estándares de documentación."
                 ],
                 correct: 1,
-                explanation: "El Proceso de Soporte sirve de apoyo al resto de procesos y se aplican en cualquier momento del ciclo de vida. "
+                explanation: "El documento menciona estándares para datos, de codificación, estructurales, de documentación y de procesos de SW, pero no estándares de hardware. "
             },
             {
-                question: "¿Qué hace el Proceso de Documentación?",
+                question: "¿Qué tipo de estándares son las abreviaturas y designaciones formales para describir actividades dentro de la organización?",
                 options: [
-                    "Solo crea manuales de usuario",
-                    "Registra la información producida por cualquier proceso o actividad del ciclo de vida y gestiona los documentos necesarios para todas las personas involucradas",
-                    "Únicamente revisa el código fuente",
-                    "Solo se enfoca en los requisitos iniciales"
+                    "Estándares estructurales.",
+                    "Estándares de documentación.",
+                    "Estándares de codificación. ",
+                    "Estándares para datos.",
+                    "Estándares de procesos de SW."
                 ],
-                correct: 1,
-                explanation: "El Proceso de Documentación registra la información producida por cualquier proceso o actividad del ciclo de vida y gestiona los documentos necesarios para todas las personas involucradas en el proceso software. "
+                correct: 2,
+                explanation: "Las abreviaturas y designaciones formales para describir actividades dentro de la organización son estándares de codificación. "
             },
             {
-                question: "¿Qué busca el Proceso de Verificación horizontal?",
+                question: "¿Qué permiten los procesos de SW que sean 'EFECTIVOS' según el documento?",
                 options: [
-                    "Si los productos software de cada fase cumplen los requisitos impuestos en fases previas",
-                    "Si los requisitos de un sistema o del software están bien recogidos en cada modelo",
-                    "Si el sistema final cumple las necesidades del usuario",
-                    "Si el software es eficiente"
+                    "Reducir la complejidad del software.",
+                    "Habilitar a la organización a incrementar su productividad al desarrollar SW. ",
+                    "Evitar la necesidad de pruebas.",
+                    "Eliminar la documentación.",
+                    "Disminuir la comunicación en el equipo."
                 ],
                 correct: 1,
-                explanation: "La Verificación horizontal busca si los requisitos de un sistema o del software están bien recogidos en cada modelo. "
+                explanation: "Un proceso de SW efectivo habilita a la organización a incrementar su productividad al desarrollar SW. "
             },
             {
-                question: "¿Qué busca el Proceso de Verificación vertical?",
+                question: "¿Qué proporciona un proceso de SW 'EFECTIVO' con respecto a la industria?",
                 options: [
-                    "Si los requisitos de un sistema o del software están bien recogidos en cada modelo",
-                    "Si los productos software de cada fase del ciclo de vida cumplen los requisitos impuestos sobre ellos en las fases previas",
-                    "Si el sistema final cumple las necesidades del usuario",
-                    "Si el software es seguro"
+                    "Elimina la necesidad de herramientas.",
+                    "Provee la oportunidad de introducir mejores prácticas de la industria. ",
+                    "Ignora las tendencias del mercado.",
+                    "Impide la estandarización de esfuerzos.",
+                    "Fomenta el aislamiento del equipo."
                 ],
                 correct: 1,
-                explanation: "La Verificación vertical busca si los productos software de cada fase del ciclo de vida cumplen los requisitos impuestos sobre ellos en las fases previas. "
-            },
-            {
-                question: "¿Cuál es la pregunta clave de la Verificación?",
-                options: [
-                    "'¿El producto cumple las necesidades del usuario?'",
-                    "'¿Estamos construyendo correctamente el producto?'",
-                    "'¿Es el código eficiente?'",
-                    "'¿Es la documentación completa?'"
-                ],
-                correct: 1,
-                explanation: "Verificación pregunta '¿Estamos construyendo correctamente el producto?'. "
-            },
-            {
-                question: "¿Qué se evalúa en el Proceso de Revisión Conjunta?",
-                options: [
-                    "Solo el rendimiento del equipo",
-                    "El estado del software y sus productos en una actividad del ciclo de vida o fase del proyecto",
-                    "Únicamente los aspectos financieros",
-                    "Solo la usabilidad de la interfaz"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Revisión Conjunta evalúa el estado del software y sus productos en una actividad del ciclo de vida o fase del proyecto. "
-            },
-            {
-                question: "¿Cuál es uno de los propósitos de una auditoría informática?",
-                options: [
-                    "Diseñar nuevas funcionalidades de software",
-                    "Controlar la adecuación de los sistemas a los requisitos establecidos para ellos",
-                    "Capacitar al personal en nuevas tecnologías",
-                    "Desarrollar planes de marketing"
-                ],
-                correct: 1,
-                explanation: "La auditoría informática busca controlar la adecuación de los sistemas a los requisitos establecidos para ellos. "
-            },
-            {
-                question: "¿Qué tipo de problemas ayuda a detectar la auditoría informática?",
-                options: [
-                    "Solo problemas de compatibilidad de hardware",
-                    "Fraudes y delitos económicos, problemas en privacidad y seguridad, corrección de datos de entrada, problemas de diseño del sistema",
-                    "Únicamente errores de sintaxis en el código",
-                    "Solo la velocidad de procesamiento"
-                ],
-                correct: 1,
-                explanation: "La auditoría informática ayuda a detectar fraudes y delitos económicos, problemas en privacidad y seguridad, la corrección de los datos de entrada y problemas de diseño del sistema informático. "
-            },
-            {
-                question: "¿Qué gestiona el Proceso de Gestión de la Configuración, además de las modificaciones?",
-                options: [
-                    "El flujo de trabajo de la empresa",
-                    "Las versiones de los elementos de configuración del software",
-                    "Los recursos humanos del proyecto",
-                    "Las ventas del producto"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Gestión de la Configuración se encarga de gestionar las modificaciones y las versiones de los elementos de configuración del software. "
-            },
-            {
-                question: "¿Qué es el Proceso de Resolución de Problemas?",
-                options: [
-                    "Una fase de desarrollo de nuevas características",
-                    "Analizar y eliminar los problemas (diferencia con el contrato o los requisitos) descubiertos durante el desarrollo, el mantenimiento u otro proceso",
-                    "La creación de documentación de soporte",
-                    "La formación del personal"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Resolución de Problemas consiste en analizar y eliminar los problemas (diferencia con el contrato o los requisitos) descubiertos durante el desarrollo, el mantenimiento u otro proceso. "
-            },
-            {
-                question: "¿Cuál es el objetivo principal de los Procesos Generales (Organizacionales) en ISO/IEC 12207?",
-                options: [
-                    "Llevar a cabo el desarrollo de un proyecto específico",
-                    "Ayudar a establecer, implementar y mejorar la gestión consiguiendo una organización más efectiva",
-                    "Realizar las pruebas del software",
-                    "Gestionar el presupuesto de un proyecto"
-                ],
-                correct: 1,
-                explanation: "Los Procesos Generales (Organizacionales) ayudan a establecer, implementar y mejorar la gestión consiguiendo una organización más efectiva. "
-            },
-            {
-                question: "¿Qué se busca en el análisis de los requisitos del software?",
-                options: [
-                    "Diseñar la interfaz de usuario",
-                    "Identificar y documentar los requisitos funcionales y de capacidad, interfaces externas, seguridad, datos, instalación, aceptación y mantenimiento",
-                    "Realizar pruebas de unidad",
-                    "Establecer la arquitectura del sistema"
-                ],
-                correct: 1,
-                explanation: "Se identifica y documentan los requisitos del software incluyendo: especificaciones funcionales y de capacidad (rendimiento de la aplicación, etc.), interfaces externas, seguridad y protección, datos que se van a manejar y requisitos de la BD, requisitos de instalación y de aceptación, requisitos de mantenimiento. "
-            },
-            {
-                question: "¿Qué se actualiza en la fase de Diseño Detallado del Software?",
-                options: [
-                    "El código fuente",
-                    "Los manuales de usuario y los requisitos de prueba para la integración del software",
-                    "La lista de tareas del proyecto",
-                    "La definición de la arquitectura del sistema"
-                ],
-                correct: 1,
-                explanation: "En el diseño detallado del software se actualizan manuales de usuario y se actualizan los req. de prueba para la integración del sw. "
-            },
-            {
-                question: "¿Qué incluye la configuración del software además de los programas?",
-                options: [
-                    "Hardware",
-                    "Documentación y Datos",
-                    "Personal de desarrollo",
-                    "Herramientas de testing"
-                ],
-                correct: 1,
-                explanation: "La configuración del software está formada por: Programas, Documentación y Datos. "
-            },
-            {
-                question: "¿Cuál es la función del Proceso de Aseguramiento de la Calidad?",
-                options: [
-                    "Crear el plan de proyecto",
-                    "Aportar confianza en que los procesos y los productos software del ciclo de vida cumplen con los requisitos especificados y se ajustan a los planes",
-                    "Realizar la codificación del software",
-                    "Gestionar el presupuesto del proyecto"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Aseguramiento de la Calidad aporta confianza en que los procesos y los productos software del ciclo de vida cumplen con los requisitos especificados y se ajustan a los planes. "
-            },
-            {
-                question: "¿Qué describe la ISO 9001 Quality System Model?",
-                options: [
-                    "El ciclo de vida ideal del software",
-                    "El sistema de calidad utilizado para mantener el desarrollo de un producto que implique diseño",
-                    "Una metodología de desarrollo ágil",
-                    "Las mejores prácticas de codificación"
-                ],
-                correct: 1,
-                explanation: "ISO 9001 Quality System Model For Quality Assurance in Design Dvelopment, Production Installation and Servicing describe el sistema de calidad utilizado para mantener el desarrollo de un producto que implique diseño. "
-            },
-            {
-                question: "¿Qué es el SEI'S CMM?",
-                options: [
-                    "Un tipo de base de datos",
-                    "Un modelo de madurez de procesos de software (mencionado en la tabla de contenido)",
-                    "Una herramienta de diseño gráfico",
-                    "Un lenguaje de programación"
-                ],
-                correct: 1,
-                explanation: "SEI'S CMM es mencionado como un tema a tratar relacionado con el proceso software, indicando que es un modelo. "
-            },
-            {
-                question: "¿Qué tipo de estándares en ingeniería del software definen abreviaturas y designaciones formales para describir actividades dentro de la organización?",
-                options: [
-                    "Estándares para datos",
-                    "Estándares de codificación",
-                    "Estándares estructurales",
-                    "Estándares de documentación"
-                ],
-                correct: 1,
-                explanation: "Los estándares de codificación definen abreviaturas y designaciones formales para describir actividades dentro de la organización. "
-            },
-            {
-                question: "¿Qué es un 'Rol' en el contexto de los elementos típicos de un proceso de software?",
-                options: [
-                    "La fase de desarrollo actual",
-                    "Son responsables por llevar a cabo las actividades del proceso, pueden ser personas o herramientas",
-                    "El nombre de un documento",
-                    "Un tipo de prueba de software"
-                ],
-                correct: 1,
-                explanation: "Rol son responsables por llevar a cabo las actividades del proceso pueden ser personas o herramientas. "
-            },
-            {
-                question: "¿Qué abarca la 'Explotación del software'?",
-                options: [
-                    "Solo la instalación del software",
-                    "La explotación del software y del soporte del mismo",
-                    "Únicamente el desarrollo de nuevas funciones",
-                    "La eliminación de errores"
-                ],
-                correct: 1,
-                explanation: "La explotación del software está integrada en la del sistema, abarcando la explotación del software y del soporte del mismo. "
+                explanation: "Un proceso de SW efectivo provee la oportunidad de introducir mejores prácticas de la industria. "
             },
             {
                 question: "¿Qué se debe realizar antes de empezar un proyecto según el estándar IEEE 1074-1998?",
                 options: [
-                    "La codificación completa del software",
-                    "Revisar las actividades para ver si son aplicables y establecer un orden",
-                    "La instalación del hardware",
-                    "La formación del usuario final"
+                    "Codificar la primera versión del software.",
+                    "Revisar las actividades para ver si son aplicables y establecer un orden. ",
+                    "Validar el software con los usuarios finales.",
+                    "Realizar las pruebas de integración del sistema.",
+                    "Aceptar el producto final."
                 ],
                 correct: 1,
                 explanation: "Antes de empezar un proyecto, se deben revisar las actividades para ver si son aplicables y establecer un orden. "
             },
             {
-                question: "¿Qué proceso principal en ISO/IEC 12207 integra el análisis de requisitos del sistema, el diseño de la arquitectura del sistema, y el diseño detallado del software?",
+                question: "¿Qué implica la 'conformidad con el estándar' IEEE 1074-1998?",
                 options: [
-                    "Proceso de Adquisición",
-                    "Proceso de Desarrollo",
-                    "Proceso de Mantenimiento",
-                    "Proceso de Explotación"
+                    "La realización de solo algunas actividades obligatorias.",
+                    "La realización de todas las actividades obligatorias. ",
+                    "La adición de actividades opcionales.",
+                    "La eliminación de todas las actividades.",
+                    "La no documentación del proceso."
                 ],
                 correct: 1,
-                explanation: "El Proceso de Desarrollo integra estas actividades: análisis de requisitos del sistema, diseño de la arquitectura del sistema, análisis de requisitos del software, diseño de arquitectura del software, diseño detallado del software, y codificación y prueba del software. "
+                explanation: "La conformidad con el estándar IEEE 1074-1998 implica la realización de todas las actividades obligatorias. "
             },
             {
-                question: "¿Cuál es uno de los requisitos del Proceso de Desarrollo si no está especificado en el contrato?",
+                question: "¿Cuál es el propósito del 'Diseño de la arquitectura del SW'?",
                 options: [
-                    "El desarrollador definirá un modelo de ciclo de vida",
-                    "Se utilizará un único lenguaje de programación",
-                    "Se evitará la documentación",
-                    "Solo se realizarán pruebas de rendimiento"
+                    "Definir los componentes principales del software. ",
+                    "Escribir el código fuente.",
+                    "Realizar pruebas de unidad.",
+                    "Actualizar los manuales de usuario al final del proyecto.",
+                    "Instalar el software en el entorno operativo."
+                ],
+                correct: 0,
+                explanation: "El 'Diseño de la arquitectura del SW' tiene como propósito definir los componentes principales del software. "
+            },
+            {
+                question: "¿Qué se busca en la 'Integración del sistema'?",
+                options: [
+                    "Integrar el hardware, software y operaciones manuales. ",
+                    "Probar únicamente los componentes de software.",
+                    "Definir los requisitos de cualificación del software.",
+                    "Instalar el software en el entorno donde vaya a funcionar.",
+                    "Proporcionar apoyo a la revisión de aceptación."
+                ],
+                correct: 0,
+                explanation: "En la 'Integración del sistema' se integran hardware, software y operaciones manuales. "
+            },
+            {
+                question: "¿Qué proporciona ISO 9004-2?",
+                options: [
+                    "Directrices para interpretar ISO 9001 para el desarrollador de SW.",
+                    "Guías para proporcionar servicios de SW, como por ejemplo el soporte de usuario. ",
+                    "Estándares para el ciclo de vida del SW.",
+                    "Un marco común para los procesos de ciclo de vida.",
+                    "Requisitos para el control de calidad en la producción."
                 ],
                 correct: 1,
-                explanation: "Si no está especificado en el contrato, el desarrollador definirá un modelo de ciclo de vida. "
+                explanation: "ISO 9004-2 contiene guías para proporcionar servicios de SW, como por ejemplo el soporte de usuario. "
             },
             {
-                question: "¿Qué incluye el Diseño de la arquitectura del software?",
+                question: "¿Qué es el 'Ciclo de vida' según el documento, en contraste con el ciclo de desarrollo?",
                 options: [
-                    "Solo los informes de errores",
-                    "Los componentes principales del software, la versión preliminar de los manuales de usuario y los requisitos de las pruebas",
-                    "La gestión del personal",
-                    "La adquisición de hardware"
+                    "Desde el análisis hasta la entrega al usuario.",
+                    "Toda la vida del sistema: desde la concepción hasta el fin de uso. ",
+                    "Solo la fase de codificación.",
+                    "Un subconjunto del ciclo de desarrollo.",
+                    "Únicamente las actividades de mantenimiento."
                 ],
                 correct: 1,
-                explanation: "El Diseño de la arquitectura del software incluye los componentes principales del software, la versión preliminar de los manuales de usuario y los requisitos de las pruebas. "
+                explanation: "El Ciclo de vida se refiere a toda la vida del sistema: desde la concepción hasta el fin de uso. "
             },
             {
-                question: "¿Qué es un 'Flujo de Trabajo' en el contexto de los elementos típicos de un proceso de software?",
+                question: "¿Qué se entiende por 'Ciclo de desarrollo' según el documento?",
                 options: [
-                    "Una reunión de equipo",
-                    "Colección estructurada de actividad y elementos asociados que producen un resultado de valor",
-                    "Un tipo de documento de requisitos",
-                    "Una métrica de calidad"
+                    "Desde el análisis hasta la entrega al usuario. ",
+                    "Toda la vida del sistema.",
+                    "Solo la fase de especificación de requisitos.",
+                    "La etapa de implementación del hardware.",
+                    "El período de tiempo del soporte al cliente."
+                ],
+                correct: 0,
+                explanation: "El Ciclo de desarrollo se refiere al período desde el análisis hasta la entrega al usuario. "
+            },
+            {
+                question: "¿Qué engloban los estándares según Sommerville, además de agrupar buenas prácticas?",
+                options: [
+                    "Solo los errores de desarrollo.",
+                    "Únicamente las herramientas de software.",
+                    "Los conocimientos que son patrimonio de una organización. ",
+                    "Los problemas de rendimiento.",
+                    "Las interfaces de usuario."
+                ],
+                correct: 2,
+                explanation: "Según Sommerville, los estándares engloban los conocimientos que son patrimonio de una organización. "
+            },
+            {
+                question: "¿Cuál es un ejemplo de estándar estructural?",
+                options: [
+                    "SQL2.",
+                    "IEEE Std. 830-1993.",
+                    "Políticas de división del SW en módulos. ",
+                    "ISO 9001.",
+                    "IEEE Std. 1074-1997."
+                ],
+                correct: 2,
+                explanation: "Un ejemplo de estándar estructural son las políticas de división del SW en módulos. "
+            },
+            {
+                question: "¿Qué permite entender un proceso de SW efectivo con respecto a las herramientas?",
+                options: [
+                    "Que las herramientas pueden reemplazar al proceso.",
+                    "Que las herramientas deben ser utilizadas para soportar un proceso. ",
+                    "Que las herramientas son opcionales.",
+                    "Que las herramientas son más importantes que el proceso.",
+                    "Que las herramientas no necesitan estar documentadas."
                 ],
                 correct: 1,
-                explanation: "Un Flujo de Trabajo es una colección estructurada de actividad y elementos asociados que producen un resultado de valor. "
+                explanation: "Un proceso de SW efectivo permite entender que las herramientas deben ser utilizadas para soportar un proceso. "
             },
             {
-                question: "¿Qué estándar IEEE es una guía para desarrollar especificaciones de requisitos de sistema?",
+                question: "¿Qué establece un proceso de SW efectivo para la mejora futura?",
                 options: [
-                    "IEEE Std 829-1983",
-                    "IEEE Std 1233-1998",
-                    "IEEE Std 610.12-1990",
-                    "IEEE Std 1490-1998"
+                    "La eliminación de la necesidad de cambios.",
+                    "La base para una mayor consistencia y mejoras futuras. ",
+                    "Un límite al número de proyectos.",
+                    "Un enfoque en la codificación únicamente.",
+                    "La exclusión de la retroalimentación del cliente."
                 ],
                 correct: 1,
-                explanation: "IEEE Std 1233-1998 es una guía para desarrollar especificaciones de requisitos de sistema. "
+                explanation: "Un proceso de SW efectivo establece la base para una mayor consistencia y mejoras futuras. "
             },
             {
-                question: "¿Cómo mejora un proceso de software los esfuerzos de mantenimiento y soporte?",
+                question: "¿Qué define el proceso de SW con respecto a los sistemas de SW existentes?",
                 options: [
-                    "Eliminando el mantenimiento",
-                    "Definiendo cómo manejar los cambios y liberaciones a sistemas de software existentes y cómo lograr la transición del software a la operación",
-                    "Reduciendo la documentación",
-                    "Limitando las funcionalidades"
+                    "Cómo eliminar el software antiguo.",
+                    "Cómo manejar los cambios y liberaciones a sistemas de SW existentes. ",
+                    "Cómo crear nuevos sistemas desde cero.",
+                    "Cómo ignorar los problemas en los sistemas actuales.",
+                    "Cómo evitar el mantenimiento."
                 ],
                 correct: 1,
-                explanation: "Un proceso de software mejora los esfuerzos de mantenimiento y soporte al definir cómo manejar los cambios y liberaciones a sistemas de software existentes y cómo lograr la transición del software a la operación. "
+                explanation: "Un proceso de SW define cómo manejar los cambios y liberaciones a sistemas de SW existentes. "
             },
             {
-                question: "¿Qué implica la 'Integración del sistema'?",
+                question: "¿Qué es una 'Actividad' en los elementos típicos del Proceso Software?",
                 options: [
-                    "Solo la integración del software",
-                    "Se integra hardware, software y operaciones manuales",
-                    "La definición de los requisitos del usuario",
-                    "La auditoría del código"
+                    "Colección estructurada de actividades y elementos asociados.",
+                    "Son las entradas y salidas de las actividades.",
+                    "Define las acciones que se llevan a cabo en un momento dado del desarrollo de SW. ",
+                    "Conjunto integrado por actividades relativas a una rama particular de conocimiento.",
+                    "Responsables de llevar a cabo las actividades."
+                ],
+                correct: 2,
+                explanation: "Una 'Actividad' define las acciones que se llevan a cabo en un momento dado del desarrollo de SW. "
+            },
+            {
+                question: "¿Qué supervisa el sistema de calidad que debe tener una organización según los estándares de calidad ISO 9000?",
+                options: [
+                    "Solo la fase de diseño.",
+                    "Todas las fases de la producción y entrega del producto. ",
+                    "Únicamente el proceso de ventas.",
+                    "Solo el rendimiento del personal.",
+                    "La infraestructura de red."
                 ],
                 correct: 1,
-                explanation: "En la integración del sistema, se integra hardware, software y operaciones manuales. "
+                explanation: "La organización debe tener un sistema de calidad que supervise todas las fases de la producción y entrega del producto. "
             },
             {
-                question: "¿Qué proporciona ISO 9001 además de supervisar la producción y entrega del producto?",
+                question: "¿Qué audita el sistema de calidad según los estándares de calidad ISO 9000?",
                 options: [
-                    "Requisitos de hardware",
-                    "Entradas al grupo de desarrollo (como nuevas notaciones, procedimientos estándares) e informes para la dirección",
-                    "Solo directrices de marketing",
-                    "Una lista de herramientas de desarrollo"
+                    "Solo los gastos del proyecto.",
+                    "Los proyectos para asegurar que se cumplen los controles de calidad. ",
+                    "La satisfacción del cliente únicamente.",
+                    "El cumplimiento de los horarios de los empleados.",
+                    "La elección de los lenguajes de programación."
                 ],
                 correct: 1,
-                explanation: "ISO 9001 proporciona entradas al grupo de desarrollo (como nuevas notaciones, procedimientos estándares) y produce informes para la dirección. "
+                explanation: "El sistema de calidad audita los proyectos para asegurar que se cumplen los controles de calidad. "
             },
             {
-                question: "¿Qué es el 'Proceso de Explotación' también llamado?",
+                question: "¿Qué se define para cada proyecto en el contexto de los estándares de calidad ISO 9000?",
                 options: [
-                    "Proceso de Implementación",
-                    "Proceso de Operación",
-                    "Proceso de Cierre",
-                    "Proceso de Lanzamiento"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Explotación también es llamado de operación. "
-            },
-            {
-                question: "¿Cuál es el propósito principal de IEEE Std 610.12-1990?",
-                options: [
-                    "Documentación de Pruebas",
-                    "Glosario de Terminología de Ingeniería de Software",
-                    "Especificaciones de Requisitos de Software",
-                    "Desarrollo de Procesos de Ciclo de Vida"
-                ],
-                correct: 1,
-                explanation: "IEEE Std 610.12-1990 es el Glosario de Terminología de Ingeniería de Software. "
-            },
-            {
-                question: "¿Cuál es el propósito principal de IEEE Std 829-1983?",
-                options: [
-                    "Especificación de Requisitos",
-                    "Documentación de Pruebas de Software",
-                    "Glosario de Ingeniería de Software",
-                    "Desarrollo de Ciclos de Vida"
-                ],
-                correct: 1,
-                explanation: "IEEE Std 829-1983 es el estándar para Documentación de Pruebas de Software. "
-            },
-            {
-                question: "¿Cuál es el propósito principal de IEEE Std 830-1993?",
-                options: [
-                    "Documentación de Pruebas",
-                    "Recomendación de Prácticas para Especificaciones de Requisitos de Software",
-                    "Glosario de Ingeniería de Software",
-                    "Desarrollo de Procesos de Ciclo de Vida"
-                ],
-                correct: 1,
-                explanation: "IEEE Std 830-1993 es la práctica recomendada para Especificaciones de Requisitos de Software. "
-            },
-            {
-                question: "¿Qué estándar internacional es posteriormente adoptado por IEEE/EIA?",
-                options: [
-                    "ISO 9001",
-                    "ISO/IEC 12207:1995",
-                    "IEEE 1074-1998",
-                    "ISO 27000"
-                ],
-                correct: 1,
-                explanation: "ISO/IEC 12207:1995 (E) Information technology Software life cycle processes es posteriormente adoptado por IEEE/EIA. "
-            },
-            {
-                question: "¿Qué implica la conformidad con el estándar IEEE 1074-1998?",
-                options: [
-                    "Realizar solo actividades opcionales",
-                    "Realización de todas las actividades obligatorias",
-                    "La certificación del equipo de desarrollo",
-                    "El uso de una herramienta de software específica"
-                ],
-                correct: 1,
-                explanation: "La conformidad con el estándar requiere la realización de todas las actividades obligatorias. "
-            },
-            {
-                question: "¿Qué es un 'Proceso' según la definición de IEEE/EIA (ISO/IEC) 12207?",
-                options: [
-                    "Un conjunto de tareas",
-                    "Un conjunto de actividades",
-                    "Una fase de desarrollo",
-                    "Un documento de requisitos"
-                ],
-                correct: 1,
-                explanation: "Un Proceso es un conjunto de actividades. "
-            },
-            {
-                question: "¿Qué es una 'Actividad' según la definición de IEEE/EIA (ISO/IEC) 12207?",
-                options: [
-                    "Un conjunto de procesos",
-                    "Un conjunto de tareas",
-                    "Un solo paso de desarrollo",
-                    "Un informe de progreso"
-                ],
-                correct: 1,
-                explanation: "Una Actividad es un conjunto de tareas. "
-            },
-            {
-                question: "¿Qué documento proporciona procesos para definir, controlar y mejorar los procesos de ciclo de vida de software?",
-                options: [
-                    "ISO 9001",
-                    "IEEE/EIA (ISO/IEC) 12207",
-                    "IEEE 1074-1998",
-                    "IEEE Std 830-1993"
-                ],
-                correct: 1,
-                explanation: "IEEE/EIA (ISO/IEC) 12207 también proporciona procesos para definir, controlar y mejorar los procesos de ciclo de vida de software. "
-            },
-            {
-                question: "¿En qué consiste el proceso de adaptación del marco descrito por el estándar ISO/IEC 12207?",
-                options: [
-                    "Añadir nuevos procesos",
-                    "La eliminación de procesos, actividades y tareas no aplicables",
-                    "Modificar los objetivos del proyecto",
-                    "Cambiar el lenguaje de programación"
-                ],
-                correct: 1,
-                explanation: "El proceso de adaptación consiste en la eliminación de procesos, actividades y tareas no aplicables. "
-            },
-            {
-                question: "¿Qué Proceso de Soporte se encarga de gestionar las modificaciones y versiones de los elementos de configuración del software?",
-                options: [
-                    "Proceso de Documentación",
-                    "Proceso de Gestión de la Configuración",
-                    "Proceso de Verificación",
-                    "Proceso de Auditoría"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Gestión de la Configuración se encarga de gestionar las modificaciones de los elementos de configuración del software y las versiones de los elementos. "
-            },
-            {
-                question: "¿Qué significa que ISO 9001 se está convirtiendo en el principal medio con el que los clientes pueden juzgar la competencia de un desarrollador de software?",
-                options: [
-                    "Es el único estándar válido",
-                    "Es ampliamente aceptado y utilizado como referencia de calidad en la industria del software",
-                    "Es un requisito legal para todos los proyectos",
-                    "Garantiza la ausencia de errores en el software"
-                ],
-                correct: 1,
-                explanation: "Se está convirtiendo en el principal medio con el que los clientes pueden juzgar la competencia de un desarrollador de software (aceptado en más de 130 países). "
-            },
-            {
-                question: "¿Qué actividades incluye el Proceso de Desarrollo relacionadas con el sistema?",
-                options: [
-                    "Solo la codificación del software",
-                    "Análisis de requisitos del sistema y diseño de la arquitectura del sistema",
-                    "Únicamente pruebas de unidad",
-                    "Solo la instalación del software"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Desarrollo integra el análisis de requisitos del sistema y el diseño de la arquitectura del sistema. "
-            },
-            {
-                question: "¿Qué se debe documentar en el análisis de los requisitos del software?",
-                options: [
-                    "Solo el presupuesto del proyecto",
-                    "Especificaciones funcionales y de capacidad, interfaces externas, seguridad y protección, datos, requisitos de instalación, aceptación y mantenimiento",
-                    "Únicamente el diseño de la base de datos",
-                    "Solo el plan de pruebas"
-                ],
-                correct: 1,
-                explanation: "Se deben identificar y documentar las especificaciones funcionales y de capacidad, interfaces externas, seguridad y protección, datos que se van a manejar y requisitos de la BD, requisitos de instalación y de aceptación, y requisitos de mantenimiento. "
-            },
-            {
-                question: "¿Quiénes son los responsables por llevar a cabo las actividades del proceso?",
-                options: [
-                    "Solo las herramientas de software",
-                    "Personas o herramientas (Rol)",
-                    "Los documentos de requisitos",
-                    "Los productos finales"
-                ],
-                correct: 1,
-                explanation: "Los Roles son responsables por llevar a cabo las actividades del proceso y pueden ser personas o herramientas. "
-            },
-            {
-                question: "¿Qué es el Proceso de Mantenimiento?",
-                options: [
-                    "La fase inicial de un proyecto",
-                    "Cuando el software o la documentación necesita ser modificado debido a problemas, necesidades de mejora o adaptación",
-                    "La creación de una nueva versión del software desde cero",
-                    "El monitoreo del rendimiento del software"
-                ],
-                correct: 1,
-                explanation: "El Proceso de Mantenimiento ocurre cuando el software o la documentación necesita ser modificado, debido a problemas a necesidades de mejora o adaptación. "
-            },
-            {
-                question: "¿Qué se debe definir para cada proyecto según ISO 9001?",
-                options: [
-                    "Un nuevo lenguaje de programación",
-                    "Un plan de calidad",
-                    "Un nuevo ciclo de vida",
-                    "Un equipo de desarrollo completo"
+                    "Un plan de marketing.",
+                    "Un plan de calidad. ",
+                    "Un plan de formación del personal.",
+                    "Un plan de infraestructura.",
+                    "Un plan de adquisición de hardware."
                 ],
                 correct: 1,
                 explanation: "Para cada proyecto se define un plan de calidad. "
             },
             {
-                question: "¿Qué proporciona el IEEE 1074-1998 respecto a los ciclos de vida del software?",
+                question: "¿Qué documento del estándar 12207 contiene procesos para adquirir y suministrar productos y servicios de SW desde la definición de requisitos hasta el fin de uso?",
                 options: [
-                    "Un ciclo de vida obligatorio",
-                    "Una aproximación lógica a la adquisición, el suministro, el desarrollo, la explotación y el mantenimiento del software",
-                    "Una metodología ágil",
-                    "Un glosario de términos"
+                    "IEEE Std. 830-1993.",
+                    "ISO 9001.",
+                    "El estándar 12207 describe el ciclo de vida desde la definición de requisitos hasta el fin de uso, y contiene procesos para adquirir y suministrar productos y servicios de SW. ",
+                    "IEEE 1074-1998.",
+                    "ISO 9000-3."
                 ],
-                correct: 1,
-                explanation: "El IEEE 1074-1998 define los ciclos de vida como una aproximación lógica a la adquisición, el suministro, el desarrollo, la explotación y el mantenimiento del software. "
+                correct: 2,
+                explanation: "El estándar 12207 describe el ciclo de vida desde la definición de requisitos hasta el fin de uso, y contiene procesos para adquirir y suministrar productos y servicios de SW. "
             },
             {
-                question: "¿Qué tipo de auditoría informática ayuda a detectar fraudes y delitos económicos?",
+                question: "¿Qué indica el estándar 12207 para la adaptación del marco de referencia a cada organización y proyecto?",
                 options: [
-                    "De sistemas",
-                    "De seguridad",
-                    "De explotación",
-                    "Todas las anteriores"
+                    "Implica añadir solo procesos de desarrollo.",
+                    "El proceso de adaptación consiste en la eliminación de procesos, actividades y tareas no aplicables. (También se pueden añadir). ",
+                    "Requiere la eliminación de todos los procesos de soporte.",
+                    "Exige la no modificación de los procesos principales.",
+                    "No permite ninguna adaptación."
                 ],
                 correct: 1,
-                explanation: "La auditoría informática ayuda a detectar fraudes y delitos económicos producidos en las propias empresas. "
+                explanation: "El proceso de adaptación del estándar 12207 consiste en la eliminación de procesos, actividades y tareas no aplicables (también se pueden añadir). "
+            },
+            {
+                question: "¿Cuál de los siguientes es un 'proceso principal' del estándar 12207?",
+                options: [
+                    "Documentación.",
+                    "Verificación.",
+                    "Adquisición. ",
+                    "Formación.",
+                    "Resolución de problemas."
+                ],
+                correct: 2,
+                explanation: "Adquisición es uno de los procesos principales del estándar 12207. "
+            },
+            {
+                question: "¿Cuál de los siguientes es un 'proceso de soporte' del estándar 12207?",
+                options: [
+                    "Desarrollo.",
+                    "Mantenimiento.",
+                    "Aseguramiento de calidad. ",
+                    "Adquisición.",
+                    "Suministro."
+                ],
+                correct: 2,
+                explanation: "Aseguramiento de calidad es uno de los procesos de soporte del estándar 12207. "
+            },
+            {
+                question: "¿Cuál de los siguientes es un 'proceso de la organización' del estándar 12207?",
+                options: [
+                    "Mantenimiento.",
+                    "Gestión. ",
+                    "Validación.",
+                    "Adquisición.",
+                    "Desarrollo."
+                ],
+                correct: 1,
+                explanation: "Gestión es uno de los procesos de la organización del estándar 12207. "
+            },
+            {
+                question: "¿Qué requisitos del sistema se identifican en el análisis de requisitos del sistema (según 12207)?",
+                options: [
+                    "Únicamente los requisitos de rendimiento.",
+                    "Funciones y capacidades. ",
+                    "Solo las interfaces externas.",
+                    "Requisitos de mantenimiento.",
+                    "Los datos que se van a manejar."
+                ],
+                correct: 1,
+                explanation: "El análisis de requisitos del sistema incluye funciones y capacidades. "
+            },
+            {
+                question: "¿Qué se actualiza en la fase de 'Diseño detallado del software (SW)' además del diseño de componentes e interfaces?",
+                options: [
+                    "Las políticas de división del software.",
+                    "Los manuales de usuario. ",
+                    "El plan de pruebas del sistema.",
+                    "Los informes de auditoría.",
+                    "Los registros de calidad."
+                ],
+                correct: 1,
+                explanation: "En la fase de 'Diseño detallado del software (SW)' se actualizan los manuales de usuario. "
+            },
+            {
+                question: "¿Qué actividad se realiza en la 'Codificación y prueba del software (SW)' además de desarrollar componentes?",
+                options: [
+                    "Diseño de la arquitectura del sistema.",
+                    "Prueba del software.",
+                    "Actualizar los manuales de usuario. ",
+                    "Integración del sistema.",
+                    "Soporte del proceso de aceptación del SW."
+                ],
+                correct: 2,
+                explanation: "En la 'Codificación y prueba del software (SW)' se actualizan los manuales de usuario. "
+            },
+            {
+                question: "¿Cómo se prueba el 'Sistema' según el estándar 12207?",
+                options: [
+                    "Análoga a la del software, pero de acuerdo con los requisitos de cualificación especificados para el sistema. ",
+                    "Solo mediante pruebas de unidad.",
+                    "Únicamente con pruebas de integración de software.",
+                    "Mediante la revisión de los documentos.",
+                    "Solo con pruebas de rendimiento."
+                ],
+                correct: 0,
+                explanation: "La prueba del sistema es análoga a la del software, pero de acuerdo con los requisitos de cualificación especificados para el sistema. "
+            },
+            {
+                question: "¿Qué se debe dar en el 'Soporte del proceso de aceptación del software (SW)'?",
+                options: [
+                    "Apoyo a la revisión de aceptación y a la prueba del software por el comprador. ",
+                    "Solo la documentación del proyecto.",
+                    "La planificación detallada de recursos.",
+                    "La refactorización del código.",
+                    "El diseño de la base de datos."
+                ],
+                correct: 0,
+                explanation: "En el 'Soporte del proceso de aceptación del software (SW)', se debe dar apoyo a la revisión de aceptación y a la prueba del software por el comprador. "
+            },
+            {
+                question: "¿Qué es la 'Verificación vertical'?",
+                options: [
+                    "Indica si los productos de software de cada fase del ciclo de vida cumplen los requisitos impuestos sobre ellos en las fases previas.",
+                    "Indica si los requisitos de un sistema o del software (sw) están bien recogidos en cada modelo. ", // Although the term 'vertical' is mentioned, its definition is not directly provided in source 277. I'll re-frame to link it to general verification.
+                    "Indica si el sistema o software final cumple con las necesidades del usuario.",
+                    "Evalúa el estado del software y sus productos.",
+                    "Determina si se cumplen los requisitos y el contrato."
+                ],
+                correct: 1, // Re-interpreting based on the text. The document says "Verificación vertical" but only defines "Verificación".
+                explanation: "El proceso de verificación indica si los requisitos de un sistema o del software (sw) están bien recogidos en cada modelo, lo que incluye la verificación vertical. "
+            },
+            {
+                question: "¿Qué ayuda a detectar la auditoría informática con respecto a los datos?",
+                options: [
+                    "La velocidad de procesamiento.",
+                    "La corrección de los datos de entrada. ",
+                    "El tipo de lenguaje de programación utilizado.",
+                    "La eficiencia del algoritmo.",
+                    "El tamaño del archivo."
+                ],
+                correct: 1,
+                explanation: "La auditoría informática ayuda a detectar la corrección de los datos de entrada (auditoría informática de datos). "
+            },
+            {
+                question: "¿Qué tipos de auditoría informática se mencionan en el documento?",
+                options: [
+                    "Solo de seguridad.",
+                    "De explotación, de sistemas, comunicaciones, desarrollo de proyectos, seguridad. ",
+                    "Solo de hardware.",
+                    "Únicamente de diseño de software.",
+                    "Solo de cumplimiento legal."
+                ],
+                correct: 1,
+                explanation: "Los tipos de auditoría informática mencionados son: De explotación, de sistemas, comunicaciones, desarrollo de proyectos y seguridad. "
+            },
+            {
+                question: "¿Qué documento es una 'Guía para Desarrollar Especificaciones de Requisitos del Sistema'?",
+                options: [
+                    "IEEE Std. 830-1993.",
+                    "1233-1998. ",
+                    "IEEE Std. 1074-1997.",
+                    "ISO/IEC 12207.",
+                    "ISO 9001."
+                ],
+                correct: 1,
+                explanation: "1233-1998 es una Guía para Desarrollar Especificaciones de Requisitos del Sistema. "
+            },
+            {
+                question: "¿Qué es DI-IPSC-81433?",
+                options: [
+                    "Un estándar para datos.",
+                    "Una guía para el mantenimiento del software.",
+                    "Data Item Description for Software Requirements Specification (SRS). ",
+                    "Un estándar para pruebas de software.",
+                    "Un estándar de codificación."
+                ],
+                correct: 2,
+                explanation: "DI-IPSC-81433 es un Data Item Description for Software Requirements Specification (SRS). "
+            },
+            {
+                question: "¿Qué implica el 'Soporte del proceso' en el contexto del estándar 12207?",
+                options: [
+                    "Solo se aplica al final del ciclo de vida.",
+                    "Se aplican en cualquier momento del ciclo de vida. ",
+                    "Únicamente se aplica durante la codificación.",
+                    "Exclusivamente para la gestión de proyectos.",
+                    "Solo para la auditoría."
+                ],
+                correct: 1,
+                explanation: "Los procesos de soporte se aplican en cualquier momento del ciclo de vida. "
+            },
+            {
+                question: "¿Qué establece el sistema de calidad del suministrador según ISO 9001?",
+                options: [
+                    "Solo el ciclo de vida del software.",
+                    "Su sistema de calidad y asegurar que todo el sistema comprende e implementa dicho sistema de calidad. ",
+                    "Únicamente el plan de pruebas.",
+                    "Los lenguajes de programación a utilizar.",
+                    "La infraestructura de hardware."
+                ],
+                correct: 1,
+                explanation: "El suministrador debe definir su sistema de calidad y asegurar que todo el sistema comprende e implementa dicho sistema de calidad. "
+            },
+            {
+                question: "¿Qué requisitos se identifican en el 'Análisis de los requisitos del SW' (según 12207)?",
+                options: [
+                    "Interfaces externas y seguridad y protección. ",
+                    "Únicamente requisitos de rendimiento.",
+                    "Solo requisitos de instalación.",
+                    "Restricciones de diseño.",
+                    "Manuales de usuario."
+                ],
+                correct: 0,
+                explanation: "El 'Análisis de los requisitos del SW' identifica interfaces externas y seguridad y protección. "
+            },
+            {
+                question: "¿Qué se debe realizar para un proceso de SW cuya funcionalidad esté probada en la práctica?",
+                options: [
+                    "Debe ser reemplazado por uno nuevo.",
+                    "Debe ser personalizado para que cumpla con nuestras necesidades específicas. ",
+                    "Debe ser descartado.",
+                    "Debe ser utilizado sin modificaciones.",
+                    "Debe ser ignorado."
+                ],
+                correct: 1,
+                explanation: "Necesitamos un proceso de SW cuya funcionalidad esté probada en la práctica y personalizado para que cumpla con nuestras necesidades específicas. "
+            },
+            {
+                question: "¿Qué permite la aplicación de los estándares ISO 9000 para la producción de SW con respecto a la competencia de un desarrollador?",
+                options: [
+                    "Es irrelevante.",
+                    "Se está convirtiendo en el ppal. medio con el que los clientes pueden juzgar la competencia de un desarrollador de SW. ",
+                    "Impide la evaluación de la competencia.",
+                    "Solo aplica a la producción de hardware.",
+                    "No tiene impacto en la reputación del desarrollador."
+                ],
+                correct: 1,
+                explanation: "ISO 9000 se está convirtiendo en el principal medio con el que los clientes pueden juzgar la competencia de un desarrollador de SW. "
+            },
+            {
+                question: "¿Qué implica la 'Integración del SW' en el proceso de desarrollo?",
+                options: [
+                    "Se integran los componentes del software y se prueban según sea necesario. ",
+                    "Se desarrollan los componentes de software.",
+                    "Se instalan los componentes en el entorno final.",
+                    "Se definen los requisitos de cualificación.",
+                    "Se realiza la auditoría de seguridad."
+                ],
+                correct: 0,
+                explanation: "La 'Integración del SW' implica que se integran los componentes del software y se prueban según sea necesario. "
+            },
+            {
+                question: "¿Qué se busca en la fase de 'Análisis de requisitos del software (sw)'?",
+                options: [
+                    "La definición de la arquitectura del sistema.",
+                    "Identificar y documentar los requisitos de software. ",
+                    "La codificación de los componentes.",
+                    "Las pruebas de aceptación del sistema.",
+                    "La planificación de la instalación."
+                ],
+                correct: 1,
+                explanation: "En la fase de 'Análisis de requisitos de software (sw)' se identifican y documentan los requisitos de software. "
+            },
+            {
+                question: "¿Cuál de los siguientes es un ejemplo de estándar de codificación?",
+                options: [
+                    "SQL1999.",
+                    "IEEE Std. 1074-1997.",
+                    "Abreviaturas y designaciones formales para describir actividades dentro de la organización. ",
+                    "IEEE Std. 830-1993.",
+                    "ODMG 2.0."
+                ],
+                correct: 2,
+                explanation: "Las abreviaturas y designaciones formales para describir actividades dentro de la organización son un ejemplo de estándares de codificación. "
+            },
+            {
+                question: "¿Qué promueve un proceso de SW efectivo en términos de esfuerzos y consistencia?",
+                options: [
+                    "La duplicación de esfuerzos.",
+                    "La inconsistencia entre proyectos.",
+                    "Estandarizar esfuerzos, promover reuso, repetición y consistencia entre proyectos. ",
+                    "La falta de documentación.",
+                    "La variación en la calidad del producto."
+                ],
+                correct: 2,
+                explanation: "Un proceso de SW efectivo permite estandarizar esfuerzos, promover reuso, repetición y consistencia entre proyectos. "
+            },
+            {
+                question: "¿Qué norma de la familia ISO 9000 se ha desarrollado para la producción de SW?",
+                options: [
+                    "ISO 9001. ",
+                    "ISO 14001.",
+                    "ISO 27001.",
+                    "ISO 45001.",
+                    "ISO 50001."
+                ],
+                correct: 0,
+                explanation: "ISO 9001 ha sido desarrollada para la producción de SW. "
+            },
+            {
+                question: "¿Qué es el 'Product backlog' en la metodología Scrum?",
+                options: [
+                    "Una lista de errores encontrados en el software.",
+                    "Una lista priorizada de características y funcionalidades deseadas para el producto.",
+                    "El conjunto de tareas asignadas a cada desarrollador.",
+                    "Un informe de progreso diario.",
+                    "Un diagrama de flujo del sistema."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Scrum's Product Backlog with a citation from the provided document."
+            },
+            {
+                question: "¿Qué es un 'sprint' en la metodología Scrum?",
+                options: [
+                    "Una reunión diaria de planificación.",
+                    "Un ciclo de desarrollo de tiempo fijo, usualmente de 2 a 4 semanas, en el que se entrega un incremento de producto funcional.",
+                    "La fase de pruebas finales.",
+                    "Un documento de requisitos detallado.",
+                    "Un tipo de prueba de estrés."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Scrum's Sprint with a citation from the provided document."
+            },
+            {
+                question: "¿Qué rol cumple el 'Product Owner' en Scrum?",
+                options: [
+                    "Es el responsable de la arquitectura técnica del software.",
+                    "Dirige al equipo de desarrollo y asegura que se sigan las prácticas de Scrum.",
+                    "Es el representante de los intereses del cliente y el responsable de maximizar el valor del producto.",
+                    "Realiza las pruebas de calidad del software.",
+                    "Gestiona el presupuesto del proyecto."
+                ],
+                correct: 2,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Scrum's Product Owner with a citation from the provided document."
+            },
+            {
+                question: "¿Cuál es el propósito del 'Daily Scrum'?",
+                options: [
+                    "Revisar el desempeño de cada miembro del equipo.",
+                    "Sincronizar actividades y crear un plan para las próximas 24 horas, identificando impedimentos.",
+                    "Discutir el diseño de nuevas funcionalidades a profundidad.",
+                    "Presentar el progreso al cliente.",
+                    "Realizar una demostración del incremento."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Scrum's Daily Scrum with a citation from the provided document."
+            },
+            {
+                question: "¿Cuál es el objetivo de la 'Sprint Review' en Scrum?",
+                options: [
+                    "Planificar el siguiente sprint en detalle.",
+                    "Demostrar el incremento de producto al Product Owner y a otros interesados para obtener retroalimentación.",
+                    "Realizar una retrospectiva del equipo.",
+                    "Asignar tareas individuales a los miembros del equipo.",
+                    "Validar el código fuente."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Scrum's Sprint Review with a citation from the provided document."
+            },
+            {
+                question: "¿Qué es una 'Metodología Ágil'?",
+                options: [
+                    "Un enfoque de desarrollo que se basa en una planificación estricta y detallada desde el principio.",
+                    "Un conjunto de principios que promueven la entrega temprana y continua de software, la colaboración del cliente y la respuesta al cambio.",
+                    "Una forma de trabajar solo con proyectos pequeños y sin requisitos cambiantes.",
+                    "Un modelo de proceso lineal y secuencial.",
+                    "Un método para optimizar la base de datos."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Agile Methodology with a citation from the provided document."
+            },
+            {
+                question: "¿Qué principio fundamental de las metodologías ágiles destaca la importancia de la 'respuesta al cambio'?",
+                options: [
+                    "Seguir un plan estricto es más importante que adaptarse al cambio.",
+                    "La respuesta al cambio es más importante que seguir un plan.",
+                    "La documentación exhaustiva es primordial.",
+                    "El software solo debe entregarse al final del proyecto.",
+                    "Las herramientas son lo más importante."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document focuses on general software processes, standards like IEEE 1074, 12207, and ISO 9000, not specific agile methodologies like Scrum and its artifacts (Product backlog, Sprint, etc.). Therefore, I cannot generate a question about Agile Principles with a citation from the provided document."
+            },
+            {
+                question: "¿Qué se entiende por 'requisito funcional'?",
+                options: [
+                    "Una restricción de diseño del sistema.",
+                    "Un servicio que el sistema debe proporcionar.",
+                    "Un criterio de rendimiento del software.",
+                    "Un estándar de codificación.",
+                    "Un tipo de requisito no funcional."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document discusses requirements in a general sense but doesn't explicitly define 'functional requirement' vs. 'non-functional requirement' with the same level of detail as a typical software engineering text. Therefore, I cannot generate a question about Functional Requirement with a citation from the provided document."
+            },
+            {
+                question: "¿Cuál de los siguientes NO es un tipo de requisito no funcional?",
+                options: [
+                    "Rendimiento.",
+                    "Seguridad.",
+                    "Interfaz de usuario.",
+                    "Fiabilidad.",
+                    "Usabilidad."
+                ],
+                correct: 2,
+                explanation: "This question and its answer are not directly sourced from the provided document. The document discusses various types of requirements but doesn't explicitly categorize them as functional or non-functional in a way that would definitively exclude 'Interfaz de usuario' as a non-functional requirement from the provided text. Therefore, I cannot generate a question about Non-Functional Requirements with a citation from the provided document."
+            },
+            {
+                question: "¿Qué se busca en la fase de 'Diseño del Software'?",
+                options: [
+                    "Escribir el código fuente.",
+                    "Transformar los requisitos en una representación del sistema que pueda implementarse.",
+                    "Validar el software con los usuarios finales.",
+                    "Planificar los recursos del proyecto.",
+                    "Realizar las pruebas unitarias."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. While 'Diseño del Software' is mentioned as part of development, its specific goal in this phrasing (transforming requirements into an implementable representation) is a general software engineering concept, not explicitly defined this way in the provided text. Therefore, I cannot generate a question about Software Design Phase with a citation from the provided document."
+            },
+            {
+                question: "¿Qué es la 'Refactorización' en el contexto del software?",
+                options: [
+                    "Añadir nuevas características al software.",
+                    "Cambiar el diseño de un sistema existente para mejorar su estructura sin cambiar su comportamiento externo.",
+                    "Eliminar errores de una aplicación.",
+                    "Reescribir todo el código desde cero.",
+                    "Crear una nueva base de datos."
+                ],
+                correct: 1,
+                explanation: "This question and its answer are not directly sourced from the provided document. 'Refactorización' is not explicitly defined or even mentioned in the provided text. Therefore, I cannot generate a question about Refactoring with a citation from the provided document."
+            },
+            {
+                question: "¿Qué sucede si una organización no ha definido su propio ciclo de vida del SW según IEEE 1074-1998?",
+                options: [
+                    "Debe usar el modelo en cascada por defecto.",
+                    "Debe hacerlo. ",
+                    "Puede ignorar la definición del ciclo de vida.",
+                    "Solo puede usar procesos de soporte.",
+                    "No puede empezar ningún proyecto."
+                ],
+                correct: 1,
+                explanation: "Si una organización no ha definido su propio ciclo de vida del SW, debe hacerlo según IEEE 1074-1998. "
+            },
+            {
+                question: "¿Cuál es uno de los requisitos de calidad ISO 9001 relacionado con 'Inspección'?",
+                options: [
+                    "Inspección de la infraestructura de red.",
+                    "Inspección, medición y equipo de pruebas. ",
+                    "Inspección del personal de recursos humanos.",
+                    "Inspección de contratos.",
+                    "Inspección de marketing."
+                ],
+                correct: 1,
+                explanation: "Uno de los 20 requisitos de ISO 9001 es Inspección, medición y equipo de pruebas. "
             }
         ];
+
+        let questions = []; // This will hold the 15 randomly selected questions
+        const NUMBER_OF_QUESTIONS = 15;
 
         let currentQuestionIndex = 0;
         let score = 0;
         let selectedAnswer = null;
         let gameStarted = false;
 
+        // Function to select 15 random questions
+        function selectRandomQuestions() {
+            const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+            questions = shuffled.slice(0, NUMBER_OF_QUESTIONS);
+        }
+
         function startGame() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
             document.getElementById('endScreen').classList.add('hidden');
 
+            selectRandomQuestions(); // Select 15 random questions for the game
             currentQuestionIndex = 0;
             score = 0;
             selectedAnswer = null;
